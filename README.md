@@ -3,7 +3,7 @@ Notes and practice projects following the lessons from Milos Popovic's book
 
 Progress:
 1. [x] Your Mapping Cockpit: Meet RStudio
-2. [ ] Understanding Spatial Data in R: Shapes, Grids, and Addresses
+2. [x] Understanding Spatial Data in R: Shapes, Grids, and Addresses
 3. [ ] Finding and Preparing Spatial Data: Your ingredients
 4. [ ] Creating Your First Thematic Map with ggplot2
 5. [ ] Point Maps and Geographic Visualization

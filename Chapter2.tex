@@ -1,0 +1,1198 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+]{article}
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Chapter2},
+  pdfauthor={The Caveman Coder},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Chapter2}
+\author{The Caveman Coder}
+\date{2025-10-27}
+
+\begin{document}
+\maketitle
+
+Two Flavors of Spatial Data: 1. Vector Data - Drawing with precision
+using points, linestrings, and polygon objects. 2. Raster Data -
+Rendering a map using colored squares (pixels), like a digital
+photograph.
+
+Standard tools: \texttt{sf} for vector data, \texttt{terra} for raster
+data.
+
+Examples: Want to map road networks precisely? Vector (\texttt{sf}).
+Want to show elevation across a landscape? Raster (\texttt{terra}). Want
+to calclate the length of a river? Vector (\texttt{sf}). Want to analyze
+satellite imagery? Raster (\texttt{terra}).
+
+Parts of an \texttt{sf} object: 1. The attribute table: similar to a
+regular data frame that holds information about each feature. Examples:
+country name, road name, etc. 2. The geometry column: contains one
+special column usually named \texttt{geometry} holds the actual spatial
+information. Examples: \texttt{POINT}, \texttt{LINESTRING}, and
+\texttt{POLYGON}.
+
+The Coordinate Reference System
+
+Problem: The earth is round and maps are flat. How do we represent
+locations accurately?
+
+The \textbf{datum} tells us how to mathematically model the Earth's
+imperfect shape. The earth is not a perfect sphere because; is has more
+bulge at the equator and more flattening at the poles. The datum defines
+an origin pont (like the Earth's center) and orientation.
+
+Example: WGS84 (World Geodetic System 1984) -- this is a global datum
+commonly used for storing geospatial data. Used by GPS.
+
+Analogy: Choosing which slightly impefect orange model to use as
+reference before you start peeling.
+
+The \textbf{Projection} defines how to mathematically translate the
+coordinates from the curved datum surface onto a flat map.
+
+Analogy: Flattening the orange peel.
+
+All projections introduce some kind of distorsion because it is
+impossible to perfectly flatten a curved surface without stretvhing,
+tearing, or squashing something.
+
+\textbf{Conformal Projections} preserve local shapes and angles
+correctly. Examples: Mercator projection, Lambert conformal conic
+projection.
+
+\textbf{Equal-Area Projections} preserve the area of the features across
+the map, but distort shapes, angles, and distances. Example: Albers
+Equal Area projection, Mollewide projection, Eckert IV projection.
+
+\textbf{Equidistant Projections} preserve distances correctly from one
+or two central points to all other points, but distort shape and area
+elsewhere.
+
+\textbf{Azimuthal Projections} preserve direction correctly form a
+central point. Example: Mecca Projection.
+
+Why is CRS critical? - Alignment: When data layers are overlaid on a
+map, the features must line up.\\
+- Analysis: When we need to calculate something (like distance or
+area).\\
+- Appearance: The choice of projection affects how the map looks.
+
+CRSs are often identified by unique codes. Examples: - EPSG:4326 - One
+of the most common CRS codes. Managed by the European Petroleum Survey
+Group. Uses degrees as units.\\
+- EPSG:3587 - The code for the Web Mercator Projection used by Google
+Maps and OpenStreeMap. Uses meters as units, these distances are only
+accurate near the equator.\\
+- UTM Zones (e.g., EPSG:32632 for UTM Zone 32N) - divides the world into
+60 narrow zones, where each zone has its own projected CRS and is
+designed to be accurate (low distorsion in shape, area, distance) within
+that specific zone. Units are in meters. Exellent for local and regional
+mapping and analysis.\\
+- National/Continental Grids (EPSG:5070 for USA Albers Equal Area,
+EPSG:28992 for Dutch National Grid) - Official projected CRSs of some
+countries or continents. Designed for accuracy within their boundaries.
+Units can be in meters or feet.
+
+For more information on EPSG codes, go to \url{https://epsg.io/}.
+
+Every spatial dataset has a CRS (Datum + Projection). As demonstrated in
+Chapter 1, we can use \texttt{st\_crs()} to check and
+\texttt{st\_transform()} to change CRS, often using standard EPSG codes.
+
+Common spatial file formats:\\
+- Shapefile (.shp, etc.): The old workhorse. Composed of several files
+that must be located in the same folder. Lose one file and the whole
+dataset breaks.\\
+- GeoJSON (.geojson): Modern text-based format. Stores everything in one
+human-readable file.\\
+- GeoPackage (.gpkg): The modern, open standard designed to replace
+shapefiles. Stores everything in a single file. Easier to manage and
+share.\\
+- GeoTIFF (.tif): The standard for raster data.\\
+- CSV (.csv, .txt): Often used to store lat-long columns, does not store
+CRS information. The user must tell R explicitly what system to use
+(usually \texttt{crs\ =\ 4326} for standard Lat/Lon data).
+
+\subsection{Hands-on Exercise}\label{hands-on-exercise}
+
+\textbf{Load Packages and Data}
+
+Step 1: Load necessary packages
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pacman}\SpecialCharTok{::}\FunctionTok{p\_load}\NormalTok{(sf, rnaturalearth, tidyverse)}
+\end{Highlighting}
+\end{Shaded}
+
+Step 2: Get world countries data as an \texttt{sf} object
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{world\_countries }\OtherTok{\textless{}{-}}\NormalTok{ rnaturalearth}\SpecialCharTok{::}\FunctionTok{ne\_countries}\NormalTok{(}
+  \AttributeTok{scale =} \StringTok{"medium"}\NormalTok{, }\AttributeTok{returnclass =} \StringTok{"sf"}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Step 3: Get world cities data as an \texttt{sf} object
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{world\_cities }\OtherTok{\textless{}{-}}\NormalTok{ rnaturalearth}\SpecialCharTok{::}\FunctionTok{ne\_download}\NormalTok{(}
+  \AttributeTok{scale       =} \StringTok{"medium"}\NormalTok{,}
+  \AttributeTok{type        =} \StringTok{"populated\_places"}\NormalTok{,}
+  \AttributeTok{category    =} \StringTok{"cultural"}\NormalTok{,}
+  \AttributeTok{returnclass =} \StringTok{"sf"}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Reading 'ne_50m_populated_places.zip' from naturalearth...
+\end{verbatim}
+
+\textbf{Inspect the \texttt{sf} Object Structure}
+
+Step 4: Print the whole object - see the table + geometry
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{print}\NormalTok{(world\_countries)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Simple feature collection with 242 features and 168 fields
+## Geometry type: MULTIPOLYGON
+## Dimension:     XY
+## Bounding box:  xmin: -180 ymin: -89.99893 xmax: 180 ymax: 83.59961
+## Geodetic CRS:  WGS 84
+## First 10 features:
+##         featurecla scalerank labelrank                     sovereignt sov_a3
+## 1  Admin-0 country         1         3                       Zimbabwe    ZWE
+## 2  Admin-0 country         1         3                         Zambia    ZMB
+## 3  Admin-0 country         1         3                          Yemen    YEM
+## 4  Admin-0 country         3         2                        Vietnam    VNM
+## 5  Admin-0 country         5         3                      Venezuela    VEN
+## 6  Admin-0 country         6         6                        Vatican    VAT
+## 7  Admin-0 country         1         4                        Vanuatu    VUT
+## 8  Admin-0 country         1         3                     Uzbekistan    UZB
+## 9  Admin-0 country         1         4                        Uruguay    URY
+## 10 Admin-0 country         3         6 Federated States of Micronesia    FSM
+##    adm0_dif level              type tlc                          admin adm0_a3
+## 1         0     2 Sovereign country   1                       Zimbabwe     ZWE
+## 2         0     2 Sovereign country   1                         Zambia     ZMB
+## 3         0     2 Sovereign country   1                          Yemen     YEM
+## 4         0     2 Sovereign country   1                        Vietnam     VNM
+## 5         0     2 Sovereign country   1                      Venezuela     VEN
+## 6         0     2 Sovereign country   1                        Vatican     VAT
+## 7         0     2 Sovereign country   1                        Vanuatu     VUT
+## 8         0     2 Sovereign country   1                     Uzbekistan     UZB
+## 9         0     2 Sovereign country   1                        Uruguay     URY
+## 10        0     2 Sovereign country   1 Federated States of Micronesia     FSM
+##    geou_dif                        geounit gu_a3 su_dif
+## 1         0                       Zimbabwe   ZWE      0
+## 2         0                         Zambia   ZMB      0
+## 3         0                          Yemen   YEM      0
+## 4         0                        Vietnam   VNM      0
+## 5         0                      Venezuela   VEN      0
+## 6         0                        Vatican   VAT      0
+## 7         0                        Vanuatu   VUT      0
+## 8         0                     Uzbekistan   UZB      0
+## 9         0                        Uruguay   URY      0
+## 10        0 Federated States of Micronesia   FSM      0
+##                           subunit su_a3 brk_diff       name
+## 1                        Zimbabwe   ZWE        0   Zimbabwe
+## 2                          Zambia   ZMB        0     Zambia
+## 3                           Yemen   YEM        0      Yemen
+## 4                         Vietnam   VNM        0    Vietnam
+## 5                       Venezuela   VEN        0  Venezuela
+## 6                         Vatican   VAT        0    Vatican
+## 7                         Vanuatu   VUT        0    Vanuatu
+## 8                      Uzbekistan   UZB        0 Uzbekistan
+## 9                         Uruguay   URY        0    Uruguay
+## 10 Federated States of Micronesia   FSM        0 Micronesia
+##                         name_long brk_a3   brk_name brk_group abbrev postal
+## 1                        Zimbabwe    ZWE   Zimbabwe      <NA>  Zimb.     ZW
+## 2                          Zambia    ZMB     Zambia      <NA> Zambia     ZM
+## 3                           Yemen    YEM      Yemen      <NA>   Yem.     YE
+## 4                         Vietnam    VNM    Vietnam      <NA>  Viet.     VN
+## 5                       Venezuela    VEN  Venezuela      <NA>   Ven.     VE
+## 6                         Vatican    VAT    Vatican      <NA>   Vat.      V
+## 7                         Vanuatu    VUT    Vanuatu      <NA>   Van.     VU
+## 8                      Uzbekistan    UZB Uzbekistan      <NA>   Uzb.     UZ
+## 9                         Uruguay    URY    Uruguay      <NA>   Ury.     UY
+## 10 Federated States of Micronesia    FSM Micronesia      <NA> F.S.M.    FSM
+##                           formal_en                          formal_fr
+## 1              Republic of Zimbabwe                               <NA>
+## 2                Republic of Zambia                               <NA>
+## 3                 Republic of Yemen                               <NA>
+## 4     Socialist Republic of Vietnam                               <NA>
+## 5  Bolivarian Republic of Venezuela República Bolivariana de Venezuela
+## 6         State of the Vatican City                               <NA>
+## 7               Republic of Vanuatu                               <NA>
+## 8            Republic of Uzbekistan                               <NA>
+## 9      Oriental Republic of Uruguay                               <NA>
+## 10   Federated States of Micronesia                               <NA>
+##                         name_ciawf note_adm0 note_brk
+## 1                         Zimbabwe      <NA>     <NA>
+## 2                           Zambia      <NA>     <NA>
+## 3                            Yemen      <NA>     <NA>
+## 4                          Vietnam      <NA>     <NA>
+## 5                        Venezuela      <NA>     <NA>
+## 6          Holy See (Vatican City)      <NA>     <NA>
+## 7                          Vanuatu      <NA>     <NA>
+## 8                       Uzbekistan      <NA>     <NA>
+## 9                          Uruguay      <NA>     <NA>
+## 10 Micronesia, Federated States of      <NA>     <NA>
+##                          name_sort name_alt mapcolor7 mapcolor8 mapcolor9
+## 1                         Zimbabwe     <NA>         1         5         3
+## 2                           Zambia     <NA>         5         8         5
+## 3                      Yemen, Rep.     <NA>         5         3         3
+## 4                          Vietnam     <NA>         5         6         5
+## 5                    Venezuela, RB     <NA>         1         3         1
+## 6               Vatican (Holy See) Holy See         1         3         4
+## 7                          Vanuatu     <NA>         6         3         7
+## 8                       Uzbekistan     <NA>         2         3         5
+## 9                          Uruguay     <NA>         1         2         2
+## 10 Micronesia, Federated States of     <NA>         5         2         4
+##    mapcolor13  pop_est pop_rank pop_year gdp_md gdp_year
+## 1           9 14645468       14     2019  21440     2019
+## 2          13 17861030       14     2019  23309     2019
+## 3          11 29161922       15     2019  22581     2019
+## 4           4 96462106       16     2019 261921     2019
+## 5           4 28515829       15     2019 482359     2014
+## 6           2      825        2     2019    -99     2019
+## 7           3   299882       10     2019    934     2019
+## 8           4 33580650       15     2019  57921     2019
+## 9          10  3461734       12     2019  56045     2019
+## 10         13   113815        9     2019    401     2018
+##                       economy              income_grp fips_10 iso_a2 iso_a2_eh
+## 1     5. Emerging region: G20           5. Low income      ZI     ZW        ZW
+## 2   7. Least developed region  4. Lower middle income      ZA     ZM        ZM
+## 3   7. Least developed region  4. Lower middle income      YM     YE        YE
+## 4     5. Emerging region: G20  4. Lower middle income      VM     VN        VN
+## 5     5. Emerging region: G20  3. Upper middle income      VE     VE        VE
+## 6  2. Developed region: nonG7 2. High income: nonOECD      VT     VA        VA
+## 7   7. Least developed region  4. Lower middle income      NH     VU        VU
+## 8        6. Developing region  4. Lower middle income      UZ     UZ        UZ
+## 9     5. Emerging region: G20  3. Upper middle income      UY     UY        UY
+## 10       6. Developing region  4. Lower middle income      FM     FM        FM
+##    iso_a3 iso_a3_eh iso_n3 iso_n3_eh un_a3 wb_a2 wb_a3   woe_id woe_id_eh
+## 1     ZWE       ZWE    716       716   716    ZW   ZWE 23425004  23425004
+## 2     ZMB       ZMB    894       894   894    ZM   ZMB 23425003  23425003
+## 3     YEM       YEM    887       887   887    RY   YEM 23425002  23425002
+## 4     VNM       VNM    704       704   704    VN   VNM 23424984  23424984
+## 5     VEN       VEN    862       862   862    VE   VEN 23424982  23424982
+## 6     VAT       VAT    336       336   336   -99   -99 23424986  23424986
+## 7     VUT       VUT    548       548   548    VU   VUT 23424907  23424907
+## 8     UZB       UZB    860       860   860    UZ   UZB 23424980  23424980
+## 9     URY       URY    858       858   858    UY   URY 23424979  23424979
+## 10    FSM       FSM    583       583   583    FM   FSM 23424815  23424815
+##                      woe_note adm0_iso adm0_diff adm0_tlc adm0_a3_us adm0_a3_fr
+## 1  Exact WOE match as country      ZWE      <NA>      ZWE        ZWE        ZWE
+## 2  Exact WOE match as country      ZMB      <NA>      ZMB        ZMB        ZMB
+## 3  Exact WOE match as country      YEM      <NA>      YEM        YEM        YEM
+## 4  Exact WOE match as country      VNM      <NA>      VNM        VNM        VNM
+## 5  Exact WOE match as country      VEN      <NA>      VEN        VEN        VEN
+## 6  Exact WOE match as country      VAT      <NA>      VAT        VAT        VAT
+## 7  Exact WOE match as country      VUT      <NA>      VUT        VUT        VUT
+## 8  Exact WOE match as country      UZB      <NA>      UZB        UZB        UZB
+## 9  Exact WOE match as country      URY      <NA>      URY        URY        URY
+## 10 Exact WOE match as country      FSM      <NA>      FSM        FSM        FSM
+##    adm0_a3_ru adm0_a3_es adm0_a3_cn adm0_a3_tw adm0_a3_in adm0_a3_np adm0_a3_pk
+## 1         ZWE        ZWE        ZWE        ZWE        ZWE        ZWE        ZWE
+## 2         ZMB        ZMB        ZMB        ZMB        ZMB        ZMB        ZMB
+## 3         YEM        YEM        YEM        YEM        YEM        YEM        YEM
+## 4         VNM        VNM        VNM        VNM        VNM        VNM        VNM
+## 5         VEN        VEN        VEN        VEN        VEN        VEN        VEN
+## 6         VAT        VAT        VAT        VAT        VAT        VAT        VAT
+## 7         VUT        VUT        VUT        VUT        VUT        VUT        VUT
+## 8         UZB        UZB        UZB        UZB        UZB        UZB        UZB
+## 9         URY        URY        URY        URY        URY        URY        URY
+## 10        FSM        FSM        FSM        FSM        FSM        FSM        FSM
+##    adm0_a3_de adm0_a3_gb adm0_a3_br adm0_a3_il adm0_a3_ps adm0_a3_sa adm0_a3_eg
+## 1         ZWE        ZWE        ZWE        ZWE        ZWE        ZWE        ZWE
+## 2         ZMB        ZMB        ZMB        ZMB        ZMB        ZMB        ZMB
+## 3         YEM        YEM        YEM        YEM        YEM        YEM        YEM
+## 4         VNM        VNM        VNM        VNM        VNM        VNM        VNM
+## 5         VEN        VEN        VEN        VEN        VEN        VEN        VEN
+## 6         VAT        VAT        VAT        VAT        VAT        VAT        VAT
+## 7         VUT        VUT        VUT        VUT        VUT        VUT        VUT
+## 8         UZB        UZB        UZB        UZB        UZB        UZB        UZB
+## 9         URY        URY        URY        URY        URY        URY        URY
+## 10        FSM        FSM        FSM        FSM        FSM        FSM        FSM
+##    adm0_a3_ma adm0_a3_pt adm0_a3_ar adm0_a3_jp adm0_a3_ko adm0_a3_vn adm0_a3_tr
+## 1         ZWE        ZWE        ZWE        ZWE        ZWE        ZWE        ZWE
+## 2         ZMB        ZMB        ZMB        ZMB        ZMB        ZMB        ZMB
+## 3         YEM        YEM        YEM        YEM        YEM        YEM        YEM
+## 4         VNM        VNM        VNM        VNM        VNM        VNM        VNM
+## 5         VEN        VEN        VEN        VEN        VEN        VEN        VEN
+## 6         VAT        VAT        VAT        VAT        VAT        VAT        VAT
+## 7         VUT        VUT        VUT        VUT        VUT        VUT        VUT
+## 8         UZB        UZB        UZB        UZB        UZB        UZB        UZB
+## 9         URY        URY        URY        URY        URY        URY        URY
+## 10        FSM        FSM        FSM        FSM        FSM        FSM        FSM
+##    adm0_a3_id adm0_a3_pl adm0_a3_gr adm0_a3_it adm0_a3_nl adm0_a3_se adm0_a3_bd
+## 1         ZWE        ZWE        ZWE        ZWE        ZWE        ZWE        ZWE
+## 2         ZMB        ZMB        ZMB        ZMB        ZMB        ZMB        ZMB
+## 3         YEM        YEM        YEM        YEM        YEM        YEM        YEM
+## 4         VNM        VNM        VNM        VNM        VNM        VNM        VNM
+## 5         VEN        VEN        VEN        VEN        VEN        VEN        VEN
+## 6         VAT        VAT        VAT        VAT        VAT        VAT        VAT
+## 7         VUT        VUT        VUT        VUT        VUT        VUT        VUT
+## 8         UZB        UZB        UZB        UZB        UZB        UZB        UZB
+## 9         URY        URY        URY        URY        URY        URY        URY
+## 10        FSM        FSM        FSM        FSM        FSM        FSM        FSM
+##    adm0_a3_ua adm0_a3_un adm0_a3_wb     continent region_un          subregion
+## 1         ZWE        -99        -99        Africa    Africa     Eastern Africa
+## 2         ZMB        -99        -99        Africa    Africa     Eastern Africa
+## 3         YEM        -99        -99          Asia      Asia       Western Asia
+## 4         VNM        -99        -99          Asia      Asia South-Eastern Asia
+## 5         VEN        -99        -99 South America  Americas      South America
+## 6         VAT        -99        -99        Europe    Europe    Southern Europe
+## 7         VUT        -99        -99       Oceania   Oceania          Melanesia
+## 8         UZB        -99        -99          Asia      Asia       Central Asia
+## 9         URY        -99        -99 South America  Americas      South America
+## 10        FSM        -99        -99       Oceania   Oceania         Micronesia
+##                     region_wb name_len long_len abbrev_len tiny homepart
+## 1          Sub-Saharan Africa        8        8          5  -99        1
+## 2          Sub-Saharan Africa        6        6          6  -99        1
+## 3  Middle East & North Africa        5        5          4  -99        1
+## 4         East Asia & Pacific        7        7          5    2        1
+## 5   Latin America & Caribbean        9        9          4  -99        1
+## 6       Europe & Central Asia        7        7          4    4        1
+## 7         East Asia & Pacific        7        7          4    2        1
+## 8       Europe & Central Asia       10       10          4    5        1
+## 9   Latin America & Caribbean        7        7          4  -99        1
+## 10        East Asia & Pacific       10       30          6  -99        1
+##    min_zoom min_label max_label   label_x    label_y      ne_id wikidataid
+## 1         0       2.5       8.0  29.92544 -18.911640 1159321441       Q954
+## 2         0       3.0       8.0  26.39530 -14.660804 1159321439       Q953
+## 3         0       3.0       8.0  45.87438  15.328226 1159321425       Q805
+## 4         0       2.0       7.0 105.38729  21.715416 1159321417       Q881
+## 5         0       2.5       7.5 -64.59938   7.182476 1159321411       Q717
+## 6         0       5.0      10.0  12.45342  41.903323 1159321407       Q237
+## 7         0       4.0       9.0 166.90876 -15.371530 1159321421       Q686
+## 8         0       3.0       8.0  64.00543  41.693603 1159321405       Q265
+## 9         0       3.0       8.0 -55.96694 -32.961127 1159321353        Q77
+## 10        0       5.0      10.0 158.23402   6.887553 1159320691       Q702
+##                      name_ar              name_bn
+## 1                   زيمبابوي             জিম্বাবুয়ে
+## 2                     زامبيا              জাম্বিয়া
+## 3                      اليمن               ইয়েমেন
+## 4                     فيتنام             ভিয়েতনাম
+## 5                    فنزويلا            ভেনেজুয়েলা
+## 6                  الفاتيكان        ভ্যাটিকান সিটি
+## 7                    فانواتو               ভানুয়াতু
+## 8                  أوزبكستان           উজবেকিস্তান
+## 9                 الأوروغواي                উরুগুয়ে
+## 10 ولايات ميكرونيسيا المتحدة মাইক্রোনেশিয়া যুক্তরাজ্য
+##                               name_de                        name_en
+## 1                            Simbabwe                       Zimbabwe
+## 2                              Sambia                         Zambia
+## 3                               Jemen                          Yemen
+## 4                             Vietnam                        Vietnam
+## 5                           Venezuela                      Venezuela
+## 6                        Vatikanstadt                   Vatican City
+## 7                             Vanuatu                        Vanuatu
+## 8                          Usbekistan                     Uzbekistan
+## 9                             Uruguay                        Uruguay
+## 10 Föderierte Staaten von Mikronesien Federated States of Micronesia
+##                            name_es  name_fa                     name_fr
+## 1                         Zimbabue زیمبابوه                    Zimbabwe
+## 2                           Zambia   زامبیا                      Zambie
+## 3                            Yemen      یمن                       Yémen
+## 4                          Vietnam   ویتنام                    Viêt Nam
+## 5                        Venezuela  ونزوئلا                   Venezuela
+## 6              Ciudad del Vaticano  واتیکان             Cité du Vatican
+## 7                          Vanuatu  وانواتو                     Vanuatu
+## 8                       Uzbekistán ازبکستان                 Ouzbékistan
+## 9                          Uruguay  اروگوئه                     Uruguay
+## 10 Estados Federados de Micronesia میکرونزی États fédérés de Micronésie
+##                                 name_el       name_he                  name_hi
+## 1                            Ζιμπάμπουε      זימבבואה                  ज़िम्बाब्वे
+## 2                                Ζάμπια         זמביה                  ज़ाम्बिया
+## 3                                Υεμένη          תימן                      यमन
+## 4                               Βιετνάμ       וייטנאם                  वियतनाम
+## 5                            Βενεζουέλα       ונצואלה                   वेनेज़ुएला
+## 6                              Βατικανό קריית הוותיקן                वैटिकन नगर
+## 7                             Βανουάτου        ונואטו                    वानूआटू
+## 8                          Ουζμπεκιστάν     אוזבקיסטן                उज़्बेकिस्तान
+## 9                            Ουρουγουάη     אורוגוואי                     उरुग्वे
+## 10 Ομόσπονδες Πολιτείες της Μικρονησίας     מיקרונזיה माइक्रोनेशिया के संघीकृत राज्य
+##                           name_hu    name_id                      name_it
+## 1                        Zimbabwe   Zimbabwe                     Zimbabwe
+## 2                          Zambia     Zambia                       Zambia
+## 3                           Jemen      Yaman                        Yemen
+## 4                         Vietnám    Vietnam                      Vietnam
+## 5                       Venezuela  Venezuela                    Venezuela
+## 6                         Vatikán    Vatikan           Città del Vaticano
+## 7                         Vanuatu    Vanuatu                      Vanuatu
+## 8                     Üzbegisztán Uzbekistan                   Uzbekistan
+## 9                         Uruguay    Uruguay                      Uruguay
+## 10 Mikronéziai Szövetségi Államok Mikronesia Stati Federati di Micronesia
+##             name_ja           name_ko      name_nl    name_pl     name_pt
+## 1        ジンバブエ          짐바브웨     Zimbabwe   Zimbabwe    Zimbábue
+## 2          ザンビア            잠비아       Zambia     Zambia      Zâmbia
+## 3          イエメン              예멘        Jemen      Jemen       Iémen
+## 4          ベトナム            베트남      Vietnam    Wietnam    Vietname
+## 5        ベネズエラ        베네수엘라    Venezuela  Wenezuela   Venezuela
+## 6          バチカン       바티칸 시국 Vaticaanstad    Watykan    Vaticano
+## 7          バヌアツ          바누아투      Vanuatu    Vanuatu     Vanuatu
+## 8    ウズベキスタン      우즈베키스탄  Oezbekistan Uzbekistan Uzbequistão
+## 9        ウルグアイ          우루과이      Uruguay    Urugwaj     Uruguai
+## 10 ミクロネシア連邦 미크로네시아 연방   Micronesia Mikronezja  Micronésia
+##       name_ru                   name_sv    name_tr    name_uk      name_ur
+## 1    Зимбабве                  Zimbabwe   Zimbabve   Зімбабве      زمبابوے
+## 2      Замбия                    Zambia    Zambiya     Замбія       زیمبیا
+## 3       Йемен                     Jemen      Yemen       Ємен          یمن
+## 4     Вьетнам                   Vietnam    Vietnam    В'єтнам       ویتنام
+## 5   Венесуэла                 Venezuela  Venezuela  Венесуела    وینیزویلا
+## 6     Ватикан             Vatikanstaten    Vatikan    Ватикан   ویٹیکن سٹی
+## 7     Вануату                   Vanuatu    Vanuatu    Вануату      وانواتو
+## 8  Узбекистан                Uzbekistan Özbekistan Узбекистан     ازبکستان
+## 9     Уругвай                   Uruguay    Uruguay    Уругвай     یوراگوئے
+## 10 Микронезия Mikronesiska federationen Mikronezya Мікронезія مائیکرونیشیا
+##          name_vi          name_zh         name_zht      fclass_iso tlc_diff
+## 1       Zimbabwe         津巴布韦           辛巴威 Admin-0 country     <NA>
+## 2         Zambia           赞比亚           尚比亞 Admin-0 country     <NA>
+## 3          Yemen             也门             葉門 Admin-0 country     <NA>
+## 4       Việt Nam             越南             越南 Admin-0 country     <NA>
+## 5      Venezuela         委内瑞拉         委內瑞拉 Admin-0 country     <NA>
+## 6  Thành Vatican           梵蒂冈           梵蒂岡 Admin-0 country     <NA>
+## 7        Vanuatu         瓦努阿图           萬那杜 Admin-0 country     <NA>
+## 8     Uzbekistan     乌兹别克斯坦         烏茲別克 Admin-0 country     <NA>
+## 9        Uruguay           乌拉圭           烏拉圭 Admin-0 country     <NA>
+## 10    Micronesia 密克罗尼西亚联邦 密克羅尼西亞聯邦 Admin-0 country     <NA>
+##         fclass_tlc fclass_us fclass_fr fclass_ru fclass_es fclass_cn fclass_tw
+## 1  Admin-0 country      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 2  Admin-0 country      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 3  Admin-0 country      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 4  Admin-0 country      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 5  Admin-0 country      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 6  Admin-0 country      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 7  Admin-0 country      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 8  Admin-0 country      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 9  Admin-0 country      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 10 Admin-0 country      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+##    fclass_in fclass_np fclass_pk fclass_de fclass_gb fclass_br fclass_il
+## 1       <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 2       <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 3       <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 4       <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 5       <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 6       <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 7       <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 8       <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 9       <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 10      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+##    fclass_ps fclass_sa fclass_eg fclass_ma fclass_pt fclass_ar fclass_jp
+## 1       <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 2       <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 3       <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 4       <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 5       <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 6       <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 7       <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 8       <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 9       <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 10      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+##    fclass_ko fclass_vn fclass_tr fclass_id fclass_pl fclass_gr fclass_it
+## 1       <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 2       <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 3       <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 4       <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 5       <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 6       <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 7       <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 8       <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 9       <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 10      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+##    fclass_nl fclass_se fclass_bd fclass_ua                       geometry
+## 1       <NA>      <NA>      <NA>      <NA> MULTIPOLYGON (((31.28789 -2...
+## 2       <NA>      <NA>      <NA>      <NA> MULTIPOLYGON (((30.39609 -1...
+## 3       <NA>      <NA>      <NA>      <NA> MULTIPOLYGON (((53.08564 16...
+## 4       <NA>      <NA>      <NA>      <NA> MULTIPOLYGON (((104.064 10....
+## 5       <NA>      <NA>      <NA>      <NA> MULTIPOLYGON (((-60.82119 9...
+## 6       <NA>      <NA>      <NA>      <NA> MULTIPOLYGON (((12.43916 41...
+## 7       <NA>      <NA>      <NA>      <NA> MULTIPOLYGON (((166.7458 -1...
+## 8       <NA>      <NA>      <NA>      <NA> MULTIPOLYGON (((70.94678 42...
+## 9       <NA>      <NA>      <NA>      <NA> MULTIPOLYGON (((-53.37061 -...
+## 10      <NA>      <NA>      <NA>      <NA> MULTIPOLYGON (((162.9832 5....
+\end{verbatim}
+
+Note that the last column is \texttt{geometry} and it shows the CRS info
+and geometry type.
+
+Step 5: Check the class - what kind of object is it?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{print}\NormalTok{(}\FunctionTok{class}\NormalTok{(world\_countries))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "sf"         "data.frame"
+\end{verbatim}
+
+It is both a data frame and an\texttt{sf} object.
+
+Step 6. Use \texttt{glimpse()} for a compact summary of attributes
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dplyr}\SpecialCharTok{::}\FunctionTok{glimpse}\NormalTok{(world\_countries)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Rows: 242
+## Columns: 169
+## $ featurecla <chr> "Admin-0 country", "Admin-0 country", "Admin-0 country", "A~
+## $ scalerank  <int> 1, 1, 1, 3, 5, 6, 1, 1, 1, 3, 5, 3, 3, 3, 3, 1, 5, 3, 3, 3,~
+## $ labelrank  <int> 3, 3, 3, 2, 3, 6, 4, 3, 4, 6, 6, 6, 6, 6, 4, 5, 2, 4, 5, 6,~
+## $ sovereignt <chr> "Zimbabwe", "Zambia", "Yemen", "Vietnam", "Venezuela", "Vat~
+## $ sov_a3     <chr> "ZWE", "ZMB", "YEM", "VNM", "VEN", "VAT", "VUT", "UZB", "UR~
+## $ adm0_dif   <int> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1,~
+## $ level      <int> 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,~
+## $ type       <chr> "Sovereign country", "Sovereign country", "Sovereign countr~
+## $ tlc        <chr> "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1",~
+## $ admin      <chr> "Zimbabwe", "Zambia", "Yemen", "Vietnam", "Venezuela", "Vat~
+## $ adm0_a3    <chr> "ZWE", "ZMB", "YEM", "VNM", "VEN", "VAT", "VUT", "UZB", "UR~
+## $ geou_dif   <int> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
+## $ geounit    <chr> "Zimbabwe", "Zambia", "Yemen", "Vietnam", "Venezuela", "Vat~
+## $ gu_a3      <chr> "ZWE", "ZMB", "YEM", "VNM", "VEN", "VAT", "VUT", "UZB", "UR~
+## $ su_dif     <int> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
+## $ subunit    <chr> "Zimbabwe", "Zambia", "Yemen", "Vietnam", "Venezuela", "Vat~
+## $ su_a3      <chr> "ZWE", "ZMB", "YEM", "VNM", "VEN", "VAT", "VUT", "UZB", "UR~
+## $ brk_diff   <int> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,~
+## $ name       <chr> "Zimbabwe", "Zambia", "Yemen", "Vietnam", "Venezuela", "Vat~
+## $ name_long  <chr> "Zimbabwe", "Zambia", "Yemen", "Vietnam", "Venezuela", "Vat~
+## $ brk_a3     <chr> "ZWE", "ZMB", "YEM", "VNM", "VEN", "VAT", "VUT", "UZB", "UR~
+## $ brk_name   <chr> "Zimbabwe", "Zambia", "Yemen", "Vietnam", "Venezuela", "Vat~
+## $ brk_group  <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+## $ abbrev     <chr> "Zimb.", "Zambia", "Yem.", "Viet.", "Ven.", "Vat.", "Van.",~
+## $ postal     <chr> "ZW", "ZM", "YE", "VN", "VE", "V", "VU", "UZ", "UY", "FSM",~
+## $ formal_en  <chr> "Republic of Zimbabwe", "Republic of Zambia", "Republic of ~
+## $ formal_fr  <chr> NA, NA, NA, NA, "República Bolivariana de Venezuela", NA, N~
+## $ name_ciawf <chr> "Zimbabwe", "Zambia", "Yemen", "Vietnam", "Venezuela", "Hol~
+## $ note_adm0  <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, "U.S.A.", "U.S.~
+## $ note_brk   <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+## $ name_sort  <chr> "Zimbabwe", "Zambia", "Yemen, Rep.", "Vietnam", "Venezuela,~
+## $ name_alt   <chr> NA, NA, NA, NA, NA, "Holy See", NA, NA, NA, NA, NA, NA, NA,~
+## $ mapcolor7  <int> 1, 5, 5, 5, 1, 1, 6, 2, 1, 5, 2, 4, 4, 4, 4, 4, 4, 6, 6, 6,~
+## $ mapcolor8  <int> 5, 8, 3, 6, 3, 3, 3, 3, 2, 2, 5, 5, 5, 5, 5, 5, 5, 6, 6, 6,~
+## $ mapcolor9  <int> 3, 5, 3, 5, 1, 4, 7, 5, 2, 4, 5, 1, 1, 1, 1, 1, 1, 6, 6, 6,~
+## $ mapcolor13 <int> 9, 13, 11, 4, 4, 2, 3, 4, 10, 13, 3, 1, 1, 1, 1, 1, 1, 3, 3~
+## $ pop_est    <dbl> 14645468, 17861030, 29161922, 96462106, 28515829, 825, 2998~
+## $ pop_rank   <int> 14, 14, 15, 16, 15, 2, 10, 15, 12, 9, 8, 8, 9, 9, 8, 12, 17~
+## $ pop_year   <int> 2019, 2019, 2019, 2019, 2019, 2019, 2019, 2019, 2019, 2019,~
+## $ gdp_md     <int> 21440, 23309, 22581, 261921, 482359, -99, 934, 57921, 56045~
+## $ gdp_year   <int> 2019, 2019, 2019, 2019, 2014, 2019, 2019, 2019, 2019, 2018,~
+## $ economy    <chr> "5. Emerging region: G20", "7. Least developed region", "7.~
+## $ income_grp <chr> "5. Low income", "4. Lower middle income", "4. Lower middle~
+## $ fips_10    <chr> "ZI", "ZA", "YM", "VM", "VE", "VT", "NH", "UZ", "UY", "FM",~
+## $ iso_a2     <chr> "ZW", "ZM", "YE", "VN", "VE", "VA", "VU", "UZ", "UY", "FM",~
+## $ iso_a2_eh  <chr> "ZW", "ZM", "YE", "VN", "VE", "VA", "VU", "UZ", "UY", "FM",~
+## $ iso_a3     <chr> "ZWE", "ZMB", "YEM", "VNM", "VEN", "VAT", "VUT", "UZB", "UR~
+## $ iso_a3_eh  <chr> "ZWE", "ZMB", "YEM", "VNM", "VEN", "VAT", "VUT", "UZB", "UR~
+## $ iso_n3     <chr> "716", "894", "887", "704", "862", "336", "548", "860", "85~
+## $ iso_n3_eh  <chr> "716", "894", "887", "704", "862", "336", "548", "860", "85~
+## $ un_a3      <chr> "716", "894", "887", "704", "862", "336", "548", "860", "85~
+## $ wb_a2      <chr> "ZW", "ZM", "RY", "VN", "VE", "-99", "VU", "UZ", "UY", "FM"~
+## $ wb_a3      <chr> "ZWE", "ZMB", "YEM", "VNM", "VEN", "-99", "VUT", "UZB", "UR~
+## $ woe_id     <int> 23425004, 23425003, 23425002, 23424984, 23424982, 23424986,~
+## $ woe_id_eh  <int> 23425004, 23425003, 23425002, 23424984, 23424982, 23424986,~
+## $ woe_note   <chr> "Exact WOE match as country", "Exact WOE match as country",~
+## $ adm0_iso   <chr> "ZWE", "ZMB", "YEM", "VNM", "VEN", "VAT", "VUT", "UZB", "UR~
+## $ adm0_diff  <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+## $ adm0_tlc   <chr> "ZWE", "ZMB", "YEM", "VNM", "VEN", "VAT", "VUT", "UZB", "UR~
+## $ adm0_a3_us <chr> "ZWE", "ZMB", "YEM", "VNM", "VEN", "VAT", "VUT", "UZB", "UR~
+## $ adm0_a3_fr <chr> "ZWE", "ZMB", "YEM", "VNM", "VEN", "VAT", "VUT", "UZB", "UR~
+## $ adm0_a3_ru <chr> "ZWE", "ZMB", "YEM", "VNM", "VEN", "VAT", "VUT", "UZB", "UR~
+## $ adm0_a3_es <chr> "ZWE", "ZMB", "YEM", "VNM", "VEN", "VAT", "VUT", "UZB", "UR~
+## $ adm0_a3_cn <chr> "ZWE", "ZMB", "YEM", "VNM", "VEN", "VAT", "VUT", "UZB", "UR~
+## $ adm0_a3_tw <chr> "ZWE", "ZMB", "YEM", "VNM", "VEN", "VAT", "VUT", "UZB", "UR~
+## $ adm0_a3_in <chr> "ZWE", "ZMB", "YEM", "VNM", "VEN", "VAT", "VUT", "UZB", "UR~
+## $ adm0_a3_np <chr> "ZWE", "ZMB", "YEM", "VNM", "VEN", "VAT", "VUT", "UZB", "UR~
+## $ adm0_a3_pk <chr> "ZWE", "ZMB", "YEM", "VNM", "VEN", "VAT", "VUT", "UZB", "UR~
+## $ adm0_a3_de <chr> "ZWE", "ZMB", "YEM", "VNM", "VEN", "VAT", "VUT", "UZB", "UR~
+## $ adm0_a3_gb <chr> "ZWE", "ZMB", "YEM", "VNM", "VEN", "VAT", "VUT", "UZB", "UR~
+## $ adm0_a3_br <chr> "ZWE", "ZMB", "YEM", "VNM", "VEN", "VAT", "VUT", "UZB", "UR~
+## $ adm0_a3_il <chr> "ZWE", "ZMB", "YEM", "VNM", "VEN", "VAT", "VUT", "UZB", "UR~
+## $ adm0_a3_ps <chr> "ZWE", "ZMB", "YEM", "VNM", "VEN", "VAT", "VUT", "UZB", "UR~
+## $ adm0_a3_sa <chr> "ZWE", "ZMB", "YEM", "VNM", "VEN", "VAT", "VUT", "UZB", "UR~
+## $ adm0_a3_eg <chr> "ZWE", "ZMB", "YEM", "VNM", "VEN", "VAT", "VUT", "UZB", "UR~
+## $ adm0_a3_ma <chr> "ZWE", "ZMB", "YEM", "VNM", "VEN", "VAT", "VUT", "UZB", "UR~
+## $ adm0_a3_pt <chr> "ZWE", "ZMB", "YEM", "VNM", "VEN", "VAT", "VUT", "UZB", "UR~
+## $ adm0_a3_ar <chr> "ZWE", "ZMB", "YEM", "VNM", "VEN", "VAT", "VUT", "UZB", "UR~
+## $ adm0_a3_jp <chr> "ZWE", "ZMB", "YEM", "VNM", "VEN", "VAT", "VUT", "UZB", "UR~
+## $ adm0_a3_ko <chr> "ZWE", "ZMB", "YEM", "VNM", "VEN", "VAT", "VUT", "UZB", "UR~
+## $ adm0_a3_vn <chr> "ZWE", "ZMB", "YEM", "VNM", "VEN", "VAT", "VUT", "UZB", "UR~
+## $ adm0_a3_tr <chr> "ZWE", "ZMB", "YEM", "VNM", "VEN", "VAT", "VUT", "UZB", "UR~
+## $ adm0_a3_id <chr> "ZWE", "ZMB", "YEM", "VNM", "VEN", "VAT", "VUT", "UZB", "UR~
+## $ adm0_a3_pl <chr> "ZWE", "ZMB", "YEM", "VNM", "VEN", "VAT", "VUT", "UZB", "UR~
+## $ adm0_a3_gr <chr> "ZWE", "ZMB", "YEM", "VNM", "VEN", "VAT", "VUT", "UZB", "UR~
+## $ adm0_a3_it <chr> "ZWE", "ZMB", "YEM", "VNM", "VEN", "VAT", "VUT", "UZB", "UR~
+## $ adm0_a3_nl <chr> "ZWE", "ZMB", "YEM", "VNM", "VEN", "VAT", "VUT", "UZB", "UR~
+## $ adm0_a3_se <chr> "ZWE", "ZMB", "YEM", "VNM", "VEN", "VAT", "VUT", "UZB", "UR~
+## $ adm0_a3_bd <chr> "ZWE", "ZMB", "YEM", "VNM", "VEN", "VAT", "VUT", "UZB", "UR~
+## $ adm0_a3_ua <chr> "ZWE", "ZMB", "YEM", "VNM", "VEN", "VAT", "VUT", "UZB", "UR~
+## $ adm0_a3_un <int> -99, -99, -99, -99, -99, -99, -99, -99, -99, -99, -99, -99,~
+## $ adm0_a3_wb <int> -99, -99, -99, -99, -99, -99, -99, -99, -99, -99, -99, -99,~
+## $ continent  <chr> "Africa", "Africa", "Asia", "Asia", "South America", "Europ~
+## $ region_un  <chr> "Africa", "Africa", "Asia", "Asia", "Americas", "Europe", "~
+## $ subregion  <chr> "Eastern Africa", "Eastern Africa", "Western Asia", "South-~
+## $ region_wb  <chr> "Sub-Saharan Africa", "Sub-Saharan Africa", "Middle East & ~
+## $ name_len   <int> 8, 6, 5, 7, 9, 7, 7, 10, 7, 10, 12, 14, 15, 4, 14, 11, 24, ~
+## $ long_len   <int> 8, 6, 5, 7, 9, 7, 7, 10, 7, 30, 16, 24, 28, 4, 14, 11, 13, ~
+## $ abbrev_len <int> 5, 6, 4, 5, 4, 4, 4, 4, 4, 6, 6, 6, 11, 4, 9, 4, 6, 10, 6, ~
+## $ tiny       <int> -99, -99, -99, 2, -99, 4, 2, 5, -99, -99, 2, 3, 3, 2, 3, -9~
+## $ homepart   <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, -99, -99, -99, -99, -99, 1~
+## $ min_zoom   <dbl> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
+## $ min_label  <dbl> 2.5, 3.0, 3.0, 2.0, 2.5, 5.0, 4.0, 3.0, 3.0, 5.0, 5.0, 5.0,~
+## $ max_label  <dbl> 8.0, 8.0, 8.0, 7.0, 7.5, 10.0, 9.0, 8.0, 8.0, 10.0, 10.0, 1~
+## $ label_x    <dbl> 29.92544, 26.39530, 45.87438, 105.38729, -64.59938, 12.4534~
+## $ label_y    <dbl> -18.911640, -14.660804, 15.328226, 21.715416, 7.182476, 41.~
+## $ ne_id      <dbl> 1159321441, 1159321439, 1159321425, 1159321417, 1159321411,~
+## $ wikidataid <chr> "Q954", "Q953", "Q805", "Q881", "Q717", "Q237", "Q686", "Q2~
+## $ name_ar    <chr> "زيمبابوي", "زامبيا", "اليمن", "فيتنام", "فنزويلا", "الفاتي~
+## $ name_bn    <chr> "জিম্বাবুয়ে", "জাম্বিয়া", "ইয়েমেন", "ভিয়েতনাম", "ভেনেজুয়েলা", "ভ্যাটিকান সিটি", "ভানুয়াতু",~
+## $ name_de    <chr> "Simbabwe", "Sambia", "Jemen", "Vietnam", "Venezuela", "Vat~
+## $ name_en    <chr> "Zimbabwe", "Zambia", "Yemen", "Vietnam", "Venezuela", "Vat~
+## $ name_es    <chr> "Zimbabue", "Zambia", "Yemen", "Vietnam", "Venezuela", "Ciu~
+## $ name_fa    <chr> "زیمبابوه", "زامبیا", "یمن", "ویتنام", "ونزوئلا", "واتیکان"~
+## $ name_fr    <chr> "Zimbabwe", "Zambie", "Yémen", "Viêt Nam", "Venezuela", "Ci~
+## $ name_el    <chr> "Ζιμπάμπουε", "Ζάμπια", "Υεμένη", "Βιετνάμ", "Βενεζουέλα", ~
+## $ name_he    <chr> "זימבבואה", "זמביה", "תימן", "וייטנאם", "ונצואלה", "קריית ה~
+## $ name_hi    <chr> "ज़िम्बाब्वे", "ज़ाम्बिया", "यमन", "वियतनाम", "वेनेज़ुएला", "वैटिकन नगर", "वानूआटू", ~
+## $ name_hu    <chr> "Zimbabwe", "Zambia", "Jemen", "Vietnám", "Venezuela", "Vat~
+## $ name_id    <chr> "Zimbabwe", "Zambia", "Yaman", "Vietnam", "Venezuela", "Vat~
+## $ name_it    <chr> "Zimbabwe", "Zambia", "Yemen", "Vietnam", "Venezuela", "Cit~
+## $ name_ja    <chr> "ジンバブエ", "ザンビア", "イエメン", "ベトナム", "ベネズエラ", "バチカン", "バヌアツ", "~
+## $ name_ko    <chr> "짐바브웨", "잠비아", "예멘", "베트남", "베네수엘라", "바티칸 시국", "바누아투", "우즈베~
+## $ name_nl    <chr> "Zimbabwe", "Zambia", "Jemen", "Vietnam", "Venezuela", "Vat~
+## $ name_pl    <chr> "Zimbabwe", "Zambia", "Jemen", "Wietnam", "Wenezuela", "Wat~
+## $ name_pt    <chr> "Zimbábue", "Zâmbia", "Iémen", "Vietname", "Venezuela", "Va~
+## $ name_ru    <chr> "Зимбабве", "Замбия", "Йемен", "Вьетнам", "Венесуэла", "Ват~
+## $ name_sv    <chr> "Zimbabwe", "Zambia", "Jemen", "Vietnam", "Venezuela", "Vat~
+## $ name_tr    <chr> "Zimbabve", "Zambiya", "Yemen", "Vietnam", "Venezuela", "Va~
+## $ name_uk    <chr> "Зімбабве", "Замбія", "Ємен", "В'єтнам", "Венесуела", "Вати~
+## $ name_ur    <chr> "زمبابوے", "زیمبیا", "یمن", "ویتنام", "وینیزویلا", "ویٹیکن ~
+## $ name_vi    <chr> "Zimbabwe", "Zambia", "Yemen", "Việt Nam", "Venezuela", "Th~
+## $ name_zh    <chr> "津巴布韦", "赞比亚", "也门", "越南", "委内瑞拉", "梵蒂冈", "瓦努阿图", "乌兹别克斯坦",~
+## $ name_zht   <chr> "辛巴威", "尚比亞", "葉門", "越南", "委內瑞拉", "梵蒂岡", "萬那杜", "烏茲別克", "烏拉~
+## $ fclass_iso <chr> "Admin-0 country", "Admin-0 country", "Admin-0 country", "A~
+## $ tlc_diff   <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+## $ fclass_tlc <chr> "Admin-0 country", "Admin-0 country", "Admin-0 country", "A~
+## $ fclass_us  <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+## $ fclass_fr  <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+## $ fclass_ru  <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+## $ fclass_es  <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+## $ fclass_cn  <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+## $ fclass_tw  <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+## $ fclass_in  <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+## $ fclass_np  <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+## $ fclass_pk  <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+## $ fclass_de  <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+## $ fclass_gb  <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+## $ fclass_br  <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+## $ fclass_il  <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+## $ fclass_ps  <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+## $ fclass_sa  <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+## $ fclass_eg  <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+## $ fclass_ma  <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+## $ fclass_pt  <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+## $ fclass_ar  <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+## $ fclass_jp  <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+## $ fclass_ko  <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+## $ fclass_vn  <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+## $ fclass_tr  <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+## $ fclass_id  <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+## $ fclass_pl  <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+## $ fclass_gr  <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+## $ fclass_it  <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+## $ fclass_nl  <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+## $ fclass_se  <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+## $ fclass_bd  <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+## $ fclass_ua  <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+## $ geometry   <MULTIPOLYGON [°]> MULTIPOLYGON (((31.28789 -2..., MULTIPOLYGON (~
+\end{verbatim}
+
+Step 7: Look at JUST the attribute table (aka remove the geometry
+column)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{world\_attributes\_only }\OtherTok{\textless{}{-}}\NormalTok{ sf}\SpecialCharTok{::}\FunctionTok{st\_drop\_geometry}\NormalTok{(world\_countries)}
+\FunctionTok{head}\NormalTok{(world\_attributes\_only)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##        featurecla scalerank labelrank sovereignt sov_a3 adm0_dif level
+## 1 Admin-0 country         1         3   Zimbabwe    ZWE        0     2
+## 2 Admin-0 country         1         3     Zambia    ZMB        0     2
+## 3 Admin-0 country         1         3      Yemen    YEM        0     2
+## 4 Admin-0 country         3         2    Vietnam    VNM        0     2
+## 5 Admin-0 country         5         3  Venezuela    VEN        0     2
+## 6 Admin-0 country         6         6    Vatican    VAT        0     2
+##                type tlc     admin adm0_a3 geou_dif   geounit gu_a3 su_dif
+## 1 Sovereign country   1  Zimbabwe     ZWE        0  Zimbabwe   ZWE      0
+## 2 Sovereign country   1    Zambia     ZMB        0    Zambia   ZMB      0
+## 3 Sovereign country   1     Yemen     YEM        0     Yemen   YEM      0
+## 4 Sovereign country   1   Vietnam     VNM        0   Vietnam   VNM      0
+## 5 Sovereign country   1 Venezuela     VEN        0 Venezuela   VEN      0
+## 6 Sovereign country   1   Vatican     VAT        0   Vatican   VAT      0
+##     subunit su_a3 brk_diff      name name_long brk_a3  brk_name brk_group
+## 1  Zimbabwe   ZWE        0  Zimbabwe  Zimbabwe    ZWE  Zimbabwe      <NA>
+## 2    Zambia   ZMB        0    Zambia    Zambia    ZMB    Zambia      <NA>
+## 3     Yemen   YEM        0     Yemen     Yemen    YEM     Yemen      <NA>
+## 4   Vietnam   VNM        0   Vietnam   Vietnam    VNM   Vietnam      <NA>
+## 5 Venezuela   VEN        0 Venezuela Venezuela    VEN Venezuela      <NA>
+## 6   Vatican   VAT        0   Vatican   Vatican    VAT   Vatican      <NA>
+##   abbrev postal                        formal_en
+## 1  Zimb.     ZW             Republic of Zimbabwe
+## 2 Zambia     ZM               Republic of Zambia
+## 3   Yem.     YE                Republic of Yemen
+## 4  Viet.     VN    Socialist Republic of Vietnam
+## 5   Ven.     VE Bolivarian Republic of Venezuela
+## 6   Vat.      V        State of the Vatican City
+##                            formal_fr              name_ciawf note_adm0 note_brk
+## 1                               <NA>                Zimbabwe      <NA>     <NA>
+## 2                               <NA>                  Zambia      <NA>     <NA>
+## 3                               <NA>                   Yemen      <NA>     <NA>
+## 4                               <NA>                 Vietnam      <NA>     <NA>
+## 5 República Bolivariana de Venezuela               Venezuela      <NA>     <NA>
+## 6                               <NA> Holy See (Vatican City)      <NA>     <NA>
+##            name_sort name_alt mapcolor7 mapcolor8 mapcolor9 mapcolor13  pop_est
+## 1           Zimbabwe     <NA>         1         5         3          9 14645468
+## 2             Zambia     <NA>         5         8         5         13 17861030
+## 3        Yemen, Rep.     <NA>         5         3         3         11 29161922
+## 4            Vietnam     <NA>         5         6         5          4 96462106
+## 5      Venezuela, RB     <NA>         1         3         1          4 28515829
+## 6 Vatican (Holy See) Holy See         1         3         4          2      825
+##   pop_rank pop_year gdp_md gdp_year                    economy
+## 1       14     2019  21440     2019    5. Emerging region: G20
+## 2       14     2019  23309     2019  7. Least developed region
+## 3       15     2019  22581     2019  7. Least developed region
+## 4       16     2019 261921     2019    5. Emerging region: G20
+## 5       15     2019 482359     2014    5. Emerging region: G20
+## 6        2     2019    -99     2019 2. Developed region: nonG7
+##                income_grp fips_10 iso_a2 iso_a2_eh iso_a3 iso_a3_eh iso_n3
+## 1           5. Low income      ZI     ZW        ZW    ZWE       ZWE    716
+## 2  4. Lower middle income      ZA     ZM        ZM    ZMB       ZMB    894
+## 3  4. Lower middle income      YM     YE        YE    YEM       YEM    887
+## 4  4. Lower middle income      VM     VN        VN    VNM       VNM    704
+## 5  3. Upper middle income      VE     VE        VE    VEN       VEN    862
+## 6 2. High income: nonOECD      VT     VA        VA    VAT       VAT    336
+##   iso_n3_eh un_a3 wb_a2 wb_a3   woe_id woe_id_eh                   woe_note
+## 1       716   716    ZW   ZWE 23425004  23425004 Exact WOE match as country
+## 2       894   894    ZM   ZMB 23425003  23425003 Exact WOE match as country
+## 3       887   887    RY   YEM 23425002  23425002 Exact WOE match as country
+## 4       704   704    VN   VNM 23424984  23424984 Exact WOE match as country
+## 5       862   862    VE   VEN 23424982  23424982 Exact WOE match as country
+## 6       336   336   -99   -99 23424986  23424986 Exact WOE match as country
+##   adm0_iso adm0_diff adm0_tlc adm0_a3_us adm0_a3_fr adm0_a3_ru adm0_a3_es
+## 1      ZWE      <NA>      ZWE        ZWE        ZWE        ZWE        ZWE
+## 2      ZMB      <NA>      ZMB        ZMB        ZMB        ZMB        ZMB
+## 3      YEM      <NA>      YEM        YEM        YEM        YEM        YEM
+## 4      VNM      <NA>      VNM        VNM        VNM        VNM        VNM
+## 5      VEN      <NA>      VEN        VEN        VEN        VEN        VEN
+## 6      VAT      <NA>      VAT        VAT        VAT        VAT        VAT
+##   adm0_a3_cn adm0_a3_tw adm0_a3_in adm0_a3_np adm0_a3_pk adm0_a3_de adm0_a3_gb
+## 1        ZWE        ZWE        ZWE        ZWE        ZWE        ZWE        ZWE
+## 2        ZMB        ZMB        ZMB        ZMB        ZMB        ZMB        ZMB
+## 3        YEM        YEM        YEM        YEM        YEM        YEM        YEM
+## 4        VNM        VNM        VNM        VNM        VNM        VNM        VNM
+## 5        VEN        VEN        VEN        VEN        VEN        VEN        VEN
+## 6        VAT        VAT        VAT        VAT        VAT        VAT        VAT
+##   adm0_a3_br adm0_a3_il adm0_a3_ps adm0_a3_sa adm0_a3_eg adm0_a3_ma adm0_a3_pt
+## 1        ZWE        ZWE        ZWE        ZWE        ZWE        ZWE        ZWE
+## 2        ZMB        ZMB        ZMB        ZMB        ZMB        ZMB        ZMB
+## 3        YEM        YEM        YEM        YEM        YEM        YEM        YEM
+## 4        VNM        VNM        VNM        VNM        VNM        VNM        VNM
+## 5        VEN        VEN        VEN        VEN        VEN        VEN        VEN
+## 6        VAT        VAT        VAT        VAT        VAT        VAT        VAT
+##   adm0_a3_ar adm0_a3_jp adm0_a3_ko adm0_a3_vn adm0_a3_tr adm0_a3_id adm0_a3_pl
+## 1        ZWE        ZWE        ZWE        ZWE        ZWE        ZWE        ZWE
+## 2        ZMB        ZMB        ZMB        ZMB        ZMB        ZMB        ZMB
+## 3        YEM        YEM        YEM        YEM        YEM        YEM        YEM
+## 4        VNM        VNM        VNM        VNM        VNM        VNM        VNM
+## 5        VEN        VEN        VEN        VEN        VEN        VEN        VEN
+## 6        VAT        VAT        VAT        VAT        VAT        VAT        VAT
+##   adm0_a3_gr adm0_a3_it adm0_a3_nl adm0_a3_se adm0_a3_bd adm0_a3_ua adm0_a3_un
+## 1        ZWE        ZWE        ZWE        ZWE        ZWE        ZWE        -99
+## 2        ZMB        ZMB        ZMB        ZMB        ZMB        ZMB        -99
+## 3        YEM        YEM        YEM        YEM        YEM        YEM        -99
+## 4        VNM        VNM        VNM        VNM        VNM        VNM        -99
+## 5        VEN        VEN        VEN        VEN        VEN        VEN        -99
+## 6        VAT        VAT        VAT        VAT        VAT        VAT        -99
+##   adm0_a3_wb     continent region_un          subregion
+## 1        -99        Africa    Africa     Eastern Africa
+## 2        -99        Africa    Africa     Eastern Africa
+## 3        -99          Asia      Asia       Western Asia
+## 4        -99          Asia      Asia South-Eastern Asia
+## 5        -99 South America  Americas      South America
+## 6        -99        Europe    Europe    Southern Europe
+##                    region_wb name_len long_len abbrev_len tiny homepart
+## 1         Sub-Saharan Africa        8        8          5  -99        1
+## 2         Sub-Saharan Africa        6        6          6  -99        1
+## 3 Middle East & North Africa        5        5          4  -99        1
+## 4        East Asia & Pacific        7        7          5    2        1
+## 5  Latin America & Caribbean        9        9          4  -99        1
+## 6      Europe & Central Asia        7        7          4    4        1
+##   min_zoom min_label max_label   label_x    label_y      ne_id wikidataid
+## 1        0       2.5       8.0  29.92544 -18.911640 1159321441       Q954
+## 2        0       3.0       8.0  26.39530 -14.660804 1159321439       Q953
+## 3        0       3.0       8.0  45.87438  15.328226 1159321425       Q805
+## 4        0       2.0       7.0 105.38729  21.715416 1159321417       Q881
+## 5        0       2.5       7.5 -64.59938   7.182476 1159321411       Q717
+## 6        0       5.0      10.0  12.45342  41.903323 1159321407       Q237
+##     name_ar       name_bn      name_de      name_en             name_es
+## 1  زيمبابوي      জিম্বাবুয়ে     Simbabwe     Zimbabwe            Zimbabue
+## 2    زامبيا       জাম্বিয়া       Sambia       Zambia              Zambia
+## 3     اليمن        ইয়েমেন        Jemen        Yemen               Yemen
+## 4    فيتنام      ভিয়েতনাম      Vietnam      Vietnam             Vietnam
+## 5   فنزويلا     ভেনেজুয়েলা    Venezuela    Venezuela           Venezuela
+## 6 الفاتيكان ভ্যাটিকান সিটি Vatikanstadt Vatican City Ciudad del Vaticano
+##    name_fa         name_fr    name_el       name_he   name_hi   name_hu
+## 1 زیمبابوه        Zimbabwe Ζιμπάμπουε      זימבבואה   ज़िम्बाब्वे  Zimbabwe
+## 2   زامبیا          Zambie     Ζάμπια         זמביה   ज़ाम्बिया    Zambia
+## 3      یمن           Yémen     Υεμένη          תימן       यमन     Jemen
+## 4   ویتنام        Viêt Nam    Βιετνάμ       וייטנאם   वियतनाम   Vietnám
+## 5  ونزوئلا       Venezuela Βενεζουέλα       ונצואלה    वेनेज़ुएला Venezuela
+## 6  واتیکان Cité du Vatican   Βατικανό קריית הוותיקן वैटिकन नगर   Vatikán
+##     name_id            name_it    name_ja     name_ko      name_nl   name_pl
+## 1  Zimbabwe           Zimbabwe ジンバブエ    짐바브웨     Zimbabwe  Zimbabwe
+## 2    Zambia             Zambia   ザンビア      잠비아       Zambia    Zambia
+## 3     Yaman              Yemen   イエメン        예멘        Jemen     Jemen
+## 4   Vietnam            Vietnam   ベトナム      베트남      Vietnam   Wietnam
+## 5 Venezuela          Venezuela ベネズエラ  베네수엘라    Venezuela Wenezuela
+## 6   Vatikan Città del Vaticano   バチカン 바티칸 시국 Vaticaanstad   Watykan
+##     name_pt   name_ru       name_sv   name_tr   name_uk    name_ur
+## 1  Zimbábue  Зимбабве      Zimbabwe  Zimbabve  Зімбабве    زمبابوے
+## 2    Zâmbia    Замбия        Zambia   Zambiya    Замбія     زیمبیا
+## 3     Iémen     Йемен         Jemen     Yemen      Ємен        یمن
+## 4  Vietname   Вьетнам       Vietnam   Vietnam   В'єтнам     ویتنام
+## 5 Venezuela Венесуэла     Venezuela Venezuela Венесуела  وینیزویلا
+## 6  Vaticano   Ватикан Vatikanstaten   Vatikan   Ватикан ویٹیکن سٹی
+##         name_vi  name_zh name_zht      fclass_iso tlc_diff      fclass_tlc
+## 1      Zimbabwe 津巴布韦   辛巴威 Admin-0 country     <NA> Admin-0 country
+## 2        Zambia   赞比亚   尚比亞 Admin-0 country     <NA> Admin-0 country
+## 3         Yemen     也门     葉門 Admin-0 country     <NA> Admin-0 country
+## 4      Việt Nam     越南     越南 Admin-0 country     <NA> Admin-0 country
+## 5     Venezuela 委内瑞拉 委內瑞拉 Admin-0 country     <NA> Admin-0 country
+## 6 Thành Vatican   梵蒂冈   梵蒂岡 Admin-0 country     <NA> Admin-0 country
+##   fclass_us fclass_fr fclass_ru fclass_es fclass_cn fclass_tw fclass_in
+## 1      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 2      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 3      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 4      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 5      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 6      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+##   fclass_np fclass_pk fclass_de fclass_gb fclass_br fclass_il fclass_ps
+## 1      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 2      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 3      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 4      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 5      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 6      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+##   fclass_sa fclass_eg fclass_ma fclass_pt fclass_ar fclass_jp fclass_ko
+## 1      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 2      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 3      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 4      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 5      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 6      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+##   fclass_vn fclass_tr fclass_id fclass_pl fclass_gr fclass_it fclass_nl
+## 1      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 2      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 3      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 4      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 5      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+## 6      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+##   fclass_se fclass_bd fclass_ua
+## 1      <NA>      <NA>      <NA>
+## 2      <NA>      <NA>      <NA>
+## 3      <NA>      <NA>      <NA>
+## 4      <NA>      <NA>      <NA>
+## 5      <NA>      <NA>      <NA>
+## 6      <NA>      <NA>      <NA>
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{class}\NormalTok{(world\_attributes\_only)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "data.frame"
+\end{verbatim}
+
+Step 8: Look at JUST the geometry column
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{world\_geometry\_only }\OtherTok{\textless{}{-}}\NormalTok{ sf}\SpecialCharTok{::}\FunctionTok{st\_geometry}\NormalTok{(world\_countries)}
+\FunctionTok{head}\NormalTok{(world\_geometry\_only)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Geometry set for 6 features 
+## Geometry type: MULTIPOLYGON
+## Dimension:     XY
+## Bounding box:  xmin: -73.36621 ymin: -22.40205 xmax: 109.4449 ymax: 41.9062
+## Geodetic CRS:  WGS 84
+## First 5 geometries:
+\end{verbatim}
+
+\begin{verbatim}
+## MULTIPOLYGON (((31.28789 -22.40205, 31.19727 -2...
+\end{verbatim}
+
+\begin{verbatim}
+## MULTIPOLYGON (((30.39609 -15.64307, 30.25068 -1...
+\end{verbatim}
+
+\begin{verbatim}
+## MULTIPOLYGON (((53.08564 16.64839, 52.58145 16....
+\end{verbatim}
+
+\begin{verbatim}
+## MULTIPOLYGON (((104.064 10.39082, 104.083 10.34...
+\end{verbatim}
+
+\begin{verbatim}
+## MULTIPOLYGON (((-60.82119 9.138379, -60.94141 9...
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{class}\NormalTok{(world\_geometry\_only)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "sfc_MULTIPOLYGON" "sfc"
+\end{verbatim}
+
+Note: sfc stands for simple feature colummn.
+
+Step 9: Check the CRS again!
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{sf}\SpecialCharTok{::}\FunctionTok{st\_crs}\NormalTok{(world\_countries)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Coordinate Reference System:
+##   User input: WGS 84 
+##   wkt:
+## GEOGCRS["WGS 84",
+##     DATUM["World Geodetic System 1984",
+##         ELLIPSOID["WGS 84",6378137,298.257223563,
+##             LENGTHUNIT["metre",1]]],
+##     PRIMEM["Greenwich",0,
+##         ANGLEUNIT["degree",0.0174532925199433]],
+##     CS[ellipsoidal,2],
+##         AXIS["latitude",north,
+##             ORDER[1],
+##             ANGLEUNIT["degree",0.0174532925199433]],
+##         AXIS["longitude",east,
+##             ORDER[2],
+##             ANGLEUNIT["degree",0.0174532925199433]],
+##     ID["EPSG",4326]]
+\end{verbatim}
+
+Step 10: Transform \texttt{world\_countries} to Robinson projection
+again
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{target\_crs\_robinson }\OtherTok{\textless{}{-}} \StringTok{"ESRI:54030"} \CommentTok{\# Robinson CRS code}
+\NormalTok{world\_countries\_robinson }\OtherTok{\textless{}{-}}\NormalTok{ world\_countries }\SpecialCharTok{|\textgreater{}} 
+\NormalTok{  sf}\SpecialCharTok{::}\FunctionTok{st\_transform}\NormalTok{(}\AttributeTok{crs =}\NormalTok{ target\_crs\_robinson)}
+\end{Highlighting}
+\end{Shaded}
+
+Step 11: Check the NEW CRS
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{sf}\SpecialCharTok{::}\FunctionTok{st\_crs}\NormalTok{(world\_countries\_robinson)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Coordinate Reference System:
+##   User input: ESRI:54030 
+##   wkt:
+## PROJCRS["World_Robinson",
+##     BASEGEOGCRS["WGS 84",
+##         DATUM["World Geodetic System 1984",
+##             ELLIPSOID["WGS 84",6378137,298.257223563,
+##                 LENGTHUNIT["metre",1]]],
+##         PRIMEM["Greenwich",0,
+##             ANGLEUNIT["Degree",0.0174532925199433]]],
+##     CONVERSION["World_Robinson",
+##         METHOD["Robinson"],
+##         PARAMETER["Longitude of natural origin",0,
+##             ANGLEUNIT["Degree",0.0174532925199433],
+##             ID["EPSG",8802]],
+##         PARAMETER["False easting",0,
+##             LENGTHUNIT["metre",1],
+##             ID["EPSG",8806]],
+##         PARAMETER["False northing",0,
+##             LENGTHUNIT["metre",1],
+##             ID["EPSG",8807]]],
+##     CS[Cartesian,2],
+##         AXIS["(E)",east,
+##             ORDER[1],
+##             LENGTHUNIT["metre",1]],
+##         AXIS["(N)",north,
+##             ORDER[2],
+##             LENGTHUNIT["metre",1]],
+##     USAGE[
+##         SCOPE["Not known."],
+##         AREA["World."],
+##         BBOX[-90,-180,90,180]],
+##     ID["ESRI",54030]]
+\end{verbatim}
+
+Step 12: Plot comparison using \texttt{ggplot}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{plot\_original }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{geom\_sf}\NormalTok{(}
+    \AttributeTok{data =}\NormalTok{ world\_countries,}
+    \AttributeTok{linewidth =} \FloatTok{0.2}
+\NormalTok{  ) }\SpecialCharTok{+} 
+  \FunctionTok{ggtitle}\NormalTok{(}\StringTok{"Original (EPSG:4326)"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{()}
+
+\NormalTok{plot\_transformed }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{geom\_sf}\NormalTok{(}
+    \AttributeTok{data =}\NormalTok{ world\_countries\_robinson,}
+    \AttributeTok{linewidth =} \FloatTok{0.2}
+\NormalTok{  ) }\SpecialCharTok{+} 
+  \FunctionTok{ggtitle}\NormalTok{(}\StringTok{"Transformed (Robinson)"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{()}
+
+\CommentTok{\# Arrange the plots side{-}by{-}side using the \textasciigrave{}patchwork\textasciigrave{} package}
+\NormalTok{pacman}\SpecialCharTok{::}\FunctionTok{p\_load}\NormalTok{(patchwork)}
+\NormalTok{plot\_original }\SpecialCharTok{/}\NormalTok{ plot\_transformed}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{Chapter2_files/figure-latex/unnamed-chunk-12-1.pdf}}
+
+\end{document}

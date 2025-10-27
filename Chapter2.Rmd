@@ -1,0 +1,218 @@
+---
+title: "Chapter2"
+author: "The Caveman Coder"
+date: "2025-10-27"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+Two Flavors of Spatial Data:
+1. Vector Data - Drawing with precision using points, linestrings, and polygon 
+objects.
+2. Raster Data - Rendering a map using colored squares (pixels), like a digital
+photograph.
+
+Standard tools: `sf` for vector data, `terra` for raster data.
+
+Examples:
+Want to map road networks precisely? Vector (`sf`). Want to show elevation across 
+a landscape? Raster (`terra`). Want to calclate the length of a river? Vector 
+(`sf`). Want to analyze satellite imagery? Raster (`terra`).
+
+
+Parts of an `sf` object:
+1. The attribute table: similar to a regular data frame that holds information
+about each feature. Examples: country name, road name, etc.
+2. The geometry column: contains one special column usually named `geometry`
+holds the actual spatial information. Examples: `POINT`, `LINESTRING`, and 
+`POLYGON`.
+
+The Coordinate Reference System
+
+Problem: The earth is round and maps are flat. How do we represent locations
+accurately?
+
+The **datum** tells us how to mathematically model the Earth's imperfect shape.
+The earth is not a perfect sphere because; is has more bulge at the equator
+and more flattening at the poles. The datum defines an origin pont (like the
+Earth's center) and orientation. 
+
+Example: WGS84 (World Geodetic System 1984) -- this is a global datum commonly
+used for storing geospatial data. Used by GPS.
+
+Analogy: Choosing which slightly impefect orange model to use as reference
+before you start peeling.
+
+The **Projection** defines how to mathematically translate the coordinates from
+the curved datum surface onto a flat map.
+
+Analogy: Flattening the orange peel.
+
+All projections introduce some kind of distorsion because it is impossible to
+perfectly flatten a curved surface without stretvhing, tearing, or squashing
+something. 
+
+**Conformal Projections** preserve local shapes and angles correctly. Examples:
+Mercator projection, Lambert conformal conic projection.
+
+**Equal-Area Projections** preserve the area of the features across the map, but
+distort shapes, angles, and distances. Example: Albers Equal Area projection, 
+Mollewide projection, Eckert IV projection.
+
+**Equidistant Projections** preserve distances correctly from one or two central
+points to all other points, but distort shape and area elsewhere.
+
+**Azimuthal Projections** preserve direction correctly form a central point. 
+Example: Mecca Projection.
+
+
+Why is CRS critical? 
+- Alignment: When data layers are overlaid on a map, the features must line up.  
+- Analysis: When we need to calculate something (like distance or area).  
+- Appearance: The choice of projection affects how the map looks.
+
+
+CRSs are often identified by unique codes. Examples:
+- EPSG:4326 - One of the most common CRS codes. Managed by the European 
+Petroleum Survey Group. Uses degrees as units.  
+- EPSG:3587 - The code for the Web Mercator Projection used by Google Maps and
+OpenStreeMap. Uses meters as units, these distances are only accurate near the
+equator.  
+- UTM Zones (e.g., EPSG:32632 for UTM Zone 32N) - divides the world into 60
+narrow zones, where each zone has its own projected CRS and is designed to be
+accurate (low distorsion in shape, area, distance) within that specific zone.
+Units are in meters. Exellent for local and regional mapping and analysis.  
+- National/Continental Grids (EPSG:5070 for USA Albers Equal Area, EPSG:28992
+for Dutch National Grid) - Official projected CRSs of some countries or 
+continents. Designed for accuracy within their boundaries. Units can be in 
+meters or feet.  
+
+For more information on EPSG codes, go to https://epsg.io/.
+
+Every spatial dataset has a CRS (Datum + Projection). As demonstrated in 
+Chapter 1, we can use `st_crs()` to check and `st_transform()` to change CRS, 
+often using standard EPSG codes.
+
+Common spatial file formats:  
+- Shapefile (.shp, etc.): The old workhorse. Composed of several files that must 
+be located in the same folder. Lose one file and the whole dataset breaks.  
+- GeoJSON (.geojson): Modern text-based format. Stores everything in one 
+human-readable file.  
+- GeoPackage (.gpkg): The modern, open standard designed to replace shapefiles. 
+Stores everything in a single file. Easier to manage and share.   
+- GeoTIFF (.tif): The standard for raster data.   
+- CSV (.csv, .txt): Often used to store lat-long columns, does not store CRS
+information. The user must tell R explicitly what system to use (usually 
+`crs = 4326` for standard Lat/Lon data).  
+
+
+## Hands-on Exercise
+
+**Load Packages and Data**
+
+Step 1: Load necessary packages
+```{r}
+pacman::p_load(sf, rnaturalearth, tidyverse)
+```
+
+Step 2: Get world countries data as an `sf` object
+```{r}
+world_countries <- rnaturalearth::ne_countries(
+  scale = "medium", returnclass = "sf"
+)
+```
+
+Step 3: Get world cities data as an `sf` object
+```{r}
+world_cities <- rnaturalearth::ne_download(
+  scale       = "medium",
+  type        = "populated_places",
+  category    = "cultural",
+  returnclass = "sf"
+)
+```
+
+**Inspect the `sf` Object Structure**
+
+Step 4: Print the whole object - see the table + geometry
+```{r}
+print(world_countries)
+```
+
+Note that the last column is `geometry` and it shows the CRS info and 
+geometry type.
+
+Step 5: Check the class - what kind of object is it?
+```{r}
+print(class(world_countries))
+```
+
+It is both a data frame and an`sf` object.
+
+Step 6. Use `glimpse()` for a compact summary of attributes
+```{r}
+dplyr::glimpse(world_countries)
+```
+
+Step 7: Look at JUST the attribute table (aka remove the geometry column)
+```{r}
+world_attributes_only <- sf::st_drop_geometry(world_countries)
+head(world_attributes_only)
+class(world_attributes_only)
+```
+
+Step 8: Look at JUST the geometry column
+```{r}
+world_geometry_only <- sf::st_geometry(world_countries)
+head(world_geometry_only)
+class(world_geometry_only)
+```
+
+Note: sfc stands for simple feature colummn.
+
+Step 9: Check the CRS again!
+```{r}
+sf::st_crs(world_countries)
+```
+
+Step 10: Transform `world_countries` to Robinson projection again
+```{r}
+target_crs_robinson <- "ESRI:54030" # Robinson CRS code
+world_countries_robinson <- world_countries |> 
+  sf::st_transform(crs = target_crs_robinson)
+```
+
+Step 11: Check the NEW CRS
+```{r}
+sf::st_crs(world_countries_robinson)
+```
+
+Step 12: Plot comparison using `ggplot`
+```{r}
+plot_original <- ggplot() +
+  geom_sf(
+    data = world_countries,
+    linewidth = 0.2
+  ) + 
+  ggtitle("Original (EPSG:4326)") +
+  theme_minimal()
+
+plot_transformed <- ggplot() +
+  geom_sf(
+    data = world_countries_robinson,
+    linewidth = 0.2
+  ) + 
+  ggtitle("Transformed (Robinson)") +
+  theme_minimal()
+
+# Arrange the plots side-by-side using the `patchwork` package
+pacman::p_load(patchwork)
+plot_original / plot_transformed
+```
+
+
+
+
+
+
