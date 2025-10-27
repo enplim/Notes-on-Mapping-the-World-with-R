@@ -1,0 +1,777 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+]{article}
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Chapter 3},
+  pdfauthor={The Caveman Coder},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Chapter 3}
+\author{The Caveman Coder}
+\date{2025-10-27}
+
+\begin{document}
+\maketitle
+
+\subsection{Concepts: Finding Your Ingredients and Checking
+Quality}\label{concepts-finding-your-ingredients-and-checking-quality}
+
+Where to find reliable spatial data:
+
+\begin{itemize}
+\tightlist
+\item
+  Natural Earth (naturlearthdata.com)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Global datasets at small, medium, and large scales\\
+  \item
+    Contains physical features like coastlines, rivers, lakes\\
+  \item
+    Contains cultural features like country, borders, cities, etc.
+  \item
+    Belongs to public domain, easy to use legally! - Format is usually
+    Shapefiles\\
+  \end{itemize}
+\item
+  OpenStreeMap (OSM) (openstreetmap.org)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Like wikipedia but for maps\\
+  \item
+    Contains user-contributed details like roads, buildings, and other
+    points of interest\\
+  \item
+    Free to use (with proper attribution)\\
+  \item
+    Data quality varies by region (more mappers, more detail)\\
+  \item
+    Data structure can be quite complex\\
+  \item
+    Format may be a special OSM format or extracts (Shapefile or
+    GeoPackage)\\
+  \end{itemize}
+\item
+  GADM (gadm.org)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Database of Global Administrative Areas\\
+  \item
+    Provides administrative boundaries for nearly all countries\\
+  \item
+    Consistent source for administrative boundaries worldwide - Easy to
+    access via the \texttt{geodata} package\\
+  \item
+    Boundaries might not perfectly match official national boundaries\\
+  \item
+    Format can be Shapefile, GeoPackage, or via \texttt{geodata}\\
+  \end{itemize}
+\item
+  Government Geospatial Portals\\
+
+  \begin{itemize}
+  \tightlist
+  \item
+    data.gov, data.gov.uk, national mapping agency websites\\
+  \item
+    Can be very detailed\\
+  \item
+    Licensing terms may vary\\
+  \item
+    Format is highly variable, depending on the agency
+  \end{itemize}
+\end{itemize}
+
+Search Strategy:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Start with \texttt{naturalearth} or \texttt{geodata} packages if you
+  need general world/country/state boundaries.\\
+\item
+  Consider \texttt{osmdata} package to access OpenStreetMap if you need
+  detailed streets, buildings, cafes, parks, and other points of
+  interest.\\
+\item
+  Search for ``{[}City/State/Country{]} GIS data portal'' or ``XX
+  spatial data {[}Location{]}''.
+\end{enumerate}
+
+How to check the quality of your geospatial data: 1. Check the metadata.
+Good spatial data should come with information on the source, date of
+creation, description or abstract, CRS, scale or resolution, accuracy,
+limitations, known issues, license or use constraints.
+
+If metadata is missing, be extra critical.
+
+If available, prefer GeoPackage (*.gpkg) for vector data. If you get a
+Shapefile, make sure that you have all its component files together
+especially the \texttt{.prj} file.
+
+Ethical Considerations: When choosing data, watch out for source bias,
+proper representation, and privacy.
+
+\textbf{Being a good cartographer means being tecknicallyh skilled AND
+ethically aware.}
+
+\subsection{Hands-On: Loading and Cleaning Your Own
+Data}\label{hands-on-loading-and-cleaning-your-own-data}
+
+\textbf{Loading Vector Data}
+
+Step 1: Load necessary packages
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{if}\NormalTok{ (}\SpecialCharTok{!}\FunctionTok{requireNamespace}\NormalTok{(}\StringTok{"pacman"}\NormalTok{, }\AttributeTok{quietly =} \ConstantTok{TRUE}\NormalTok{)) \{}
+  \FunctionTok{install.packates}\NormalTok{(}\StringTok{"pacman"}\NormalTok{)}
+\NormalTok{\}}
+\FunctionTok{library}\NormalTok{(pacman)}
+\NormalTok{pacman}\SpecialCharTok{::}\FunctionTok{p\_load}\NormalTok{(sf, dplyr)}
+\end{Highlighting}
+\end{Shaded}
+
+Step 2. Load the GeoPackage file using \texttt{st\_read()}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{world\_boundaries\_loaded }\OtherTok{\textless{}{-}}\NormalTok{ sf}\SpecialCharTok{::}\FunctionTok{st\_read}\NormalTok{(}\StringTok{"data/world\_boundaries.gpkg"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Reading layer `world_boundaries' from data source 
+##   `/home/norman/Documents/ThirdBrain/x1_Projects/RProjects/Notes-on-Mapping-the-World-with-R/data/world_boundaries.gpkg' 
+##   using driver `GPKG'
+## Simple feature collection with 257 features and 4 fields
+## Geometry type: MULTIPOLYGON
+## Dimension:     XY
+## Bounding box:  xmin: -180 ymin: -89.9 xmax: 180 ymax: 83.65872
+## Geodetic CRS:  WGS 84
+\end{verbatim}
+
+Step 3: Inspect the loaded data
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{class}\NormalTok{(world\_boundaries\_loaded)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "sf"         "data.frame"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{head}\NormalTok{(world\_boundaries\_loaded)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Simple feature collection with 6 features and 4 fields
+## Geometry type: MULTIPOLYGON
+## Dimension:     XY
+## Bounding box:  xmin: -63.1112 ymin: 16.99742 xmax: 74.88986 ymax: 42.65309
+## Geodetic CRS:  WGS 84
+##   CNTR_ID                CNTR_NAME ISO3_CODE            NAME_ENGL
+## 1      AD                  Andorra       AND              Andorra
+## 2      AE الإمارات العربية المتحدة       ARE United Arab Emirates
+## 3      AF      افغانستان-افغانستان       AFG          Afghanistan
+## 4      AG      Antigua and Barbuda       ATG  Antigua and Barbuda
+## 5      AI                 Anguilla       AIA             Anguilla
+## 6      AL                Shqipëria       ALB              Albania
+##                             geom
+## 1 MULTIPOLYGON (((1.53521 42....
+## 2 MULTIPOLYGON (((56.1464 25....
+## 3 MULTIPOLYGON (((71.28622 38...
+## 4 MULTIPOLYGON (((-61.70749 1...
+## 5 MULTIPOLYGON (((-63.08349 1...
+## 6 MULTIPOLYGON (((19.75862 42...
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{sf}\SpecialCharTok{::}\FunctionTok{st\_crs}\NormalTok{(world\_boundaries\_loaded)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Coordinate Reference System:
+##   User input: WGS 84 
+##   wkt:
+## GEOGCRS["WGS 84",
+##     ENSEMBLE["World Geodetic System 1984 ensemble",
+##         MEMBER["World Geodetic System 1984 (Transit)"],
+##         MEMBER["World Geodetic System 1984 (G730)"],
+##         MEMBER["World Geodetic System 1984 (G873)"],
+##         MEMBER["World Geodetic System 1984 (G1150)"],
+##         MEMBER["World Geodetic System 1984 (G1674)"],
+##         MEMBER["World Geodetic System 1984 (G1762)"],
+##         MEMBER["World Geodetic System 1984 (G2139)"],
+##         MEMBER["World Geodetic System 1984 (G2296)"],
+##         ELLIPSOID["WGS 84",6378137,298.257223563,
+##             LENGTHUNIT["metre",1]],
+##         ENSEMBLEACCURACY[2.0]],
+##     PRIMEM["Greenwich",0,
+##         ANGLEUNIT["degree",0.0174532925199433]],
+##     CS[ellipsoidal,2],
+##         AXIS["geodetic latitude (Lat)",north,
+##             ORDER[1],
+##             ANGLEUNIT["degree",0.0174532925199433]],
+##         AXIS["geodetic longitude (Lon)",east,
+##             ORDER[2],
+##             ANGLEUNIT["degree",0.0174532925199433]],
+##     USAGE[
+##         SCOPE["Horizontal component of 3D system."],
+##         AREA["World."],
+##         BBOX[-90,-180,90,180]],
+##     ID["EPSG",4326]]
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Make the object variable available outside the chunk if needed}
+\FunctionTok{assign}\NormalTok{(}
+  \StringTok{"world\_boundaries\_loaded"}\NormalTok{,}
+\NormalTok{  world\_boundaries\_loaded,}
+  \AttributeTok{envir =}\NormalTok{ .GlobalEnv}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Loading Tabular Data}
+
+Step 1: Loading necessary packages
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pacman}\SpecialCharTok{::}\FunctionTok{p\_load}\NormalTok{(readr, dplyr)}
+\end{Highlighting}
+\end{Shaded}
+
+Step 2: Load the CSV file using \texttt{read\_csv()}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{country\_indicators\_loaded }\OtherTok{\textless{}{-}}\NormalTok{ readr}\SpecialCharTok{::}\FunctionTok{read\_csv}\NormalTok{(}\StringTok{"data/country\_indicators.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Rows: 266 Columns: 7
+## -- Column specification --------------------------------------------------------
+## Delimiter: ","
+## chr (3): country, iso2c, iso3c
+## dbl (4): year, gdp_per_capita, life_expectancy, population
+## 
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.
+\end{verbatim}
+
+Step 3: Inspect the loaded data
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{class}\NormalTok{(country\_indicators\_loaded)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "spec_tbl_df" "tbl_df"      "tbl"         "data.frame"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{head}\NormalTok{(country\_indicators\_loaded)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 6 x 7
+##   country            iso2c iso3c  year gdp_per_capita life_expectancy population
+##   <chr>              <chr> <chr> <dbl>          <dbl>           <dbl>      <dbl>
+## 1 Afghanistan        AF    AFG    2020           511.            61.5   39068979
+## 2 Africa Eastern an~ ZH    AFE    2020          1344.            63.8  694446100
+## 3 Africa Western an~ ZI    AFW    2020          1664.            57.4  474569351
+## 4 Albania            AL    ALB    2020          5371.            77.8    2837849
+## 5 Algeria            DZ    DZA    2020          3744.            73.3   44042091
+## 6 American Samoa     AS    ASM    2020         14489.            72.7      49761
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{glimpse}\NormalTok{(country\_indicators\_loaded)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Rows: 266
+## Columns: 7
+## $ country         <chr> "Afghanistan", "Africa Eastern and Southern", "Africa ~
+## $ iso2c           <chr> "AF", "ZH", "ZI", "AL", "DZ", "AS", "AD", "AO", "AG", ~
+## $ iso3c           <chr> "AFG", "AFE", "AFW", "ALB", "DZA", "ASM", "AND", "AGO"~
+## $ year            <dbl> 2020, 2020, 2020, 2020, 2020, 2020, 2020, 2020, 2020, ~
+## $ gdp_per_capita  <dbl> 510.7871, 1344.0810, 1664.2492, 5370.7786, 3743.5420, ~
+## $ life_expectancy <dbl> 61.45400, 63.76648, 57.36443, 77.82400, 73.25700, 72.6~
+## $ population      <dbl> 39068979, 694446100, 474569351, 2837849, 44042091, 497~
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Make the object available outside the chunk if needed}
+\FunctionTok{assign}\NormalTok{(}
+  \StringTok{"country\_indicators\_loaded"}\NormalTok{,}
+\NormalTok{  country\_indicators\_loaded,}
+  \AttributeTok{envir =}\NormalTok{ .GlobalEnv}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Basic Data Cleaning with \texttt{dplyr}}
+
+Step 1: Ensure packages and data are ready
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pacman}\SpecialCharTok{::}\FunctionTok{p\_load}\NormalTok{(sf, dplyr, rnaturalearth)}
+\end{Highlighting}
+\end{Shaded}
+
+Step 2: Select only needed columns. For this exercise, we only need the
+name, iso code, and geometry for our map.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# world\_boundaries\_loaded \textless{}{-} sf::st\_read("world\_boundaries.gpkg")}
+\NormalTok{sf}\SpecialCharTok{::}\FunctionTok{st\_geometry}\NormalTok{(world\_boundaries\_loaded) }\OtherTok{\textless{}{-}} \StringTok{"geometry"}
+\NormalTok{world\_selected }\OtherTok{\textless{}{-}}\NormalTok{ world\_boundaries\_loaded }\SpecialCharTok{|\textgreater{}} 
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(}
+\NormalTok{    dplyr}\SpecialCharTok{::}\FunctionTok{any\_of}\NormalTok{(}
+      \FunctionTok{c}\NormalTok{(}\StringTok{"NAME\_ENGL"}\NormalTok{, }\StringTok{"ISO3\_CODE"}\NormalTok{)}
+\NormalTok{    ), geometry}
+\NormalTok{  )}
+\FunctionTok{head}\NormalTok{(world\_selected)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Simple feature collection with 6 features and 2 fields
+## Geometry type: MULTIPOLYGON
+## Dimension:     XY
+## Bounding box:  xmin: -63.1112 ymin: 16.99742 xmax: 74.88986 ymax: 42.65309
+## Geodetic CRS:  WGS 84
+##              NAME_ENGL ISO3_CODE                       geometry
+## 1              Andorra       AND MULTIPOLYGON (((1.53521 42....
+## 2 United Arab Emirates       ARE MULTIPOLYGON (((56.1464 25....
+## 3          Afghanistan       AFG MULTIPOLYGON (((71.28622 38...
+## 4  Antigua and Barbuda       ATG MULTIPOLYGON (((-61.70749 1...
+## 5             Anguilla       AIA MULTIPOLYGON (((-63.08349 1...
+## 6              Albania       ALB MULTIPOLYGON (((19.75862 42...
+\end{verbatim}
+
+Step 3: Rename columns for easier use
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{world\_renamed }\OtherTok{\textless{}{-}}\NormalTok{ world\_selected }\SpecialCharTok{|\textgreater{}} 
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{rename}\NormalTok{(}
+    \AttributeTok{country\_name =}\NormalTok{ NAME\_ENGL,}
+    \AttributeTok{iso3 =}\NormalTok{ ISO3\_CODE}
+\NormalTok{  )}
+
+\FunctionTok{head}\NormalTok{(world\_renamed)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Simple feature collection with 6 features and 2 fields
+## Geometry type: MULTIPOLYGON
+## Dimension:     XY
+## Bounding box:  xmin: -63.1112 ymin: 16.99742 xmax: 74.88986 ymax: 42.65309
+## Geodetic CRS:  WGS 84
+##           country_name iso3                       geometry
+## 1              Andorra  AND MULTIPOLYGON (((1.53521 42....
+## 2 United Arab Emirates  ARE MULTIPOLYGON (((56.1464 25....
+## 3          Afghanistan  AFG MULTIPOLYGON (((71.28622 38...
+## 4  Antigua and Barbuda  ATG MULTIPOLYGON (((-61.70749 1...
+## 5             Anguilla  AIA MULTIPOLYGON (((-63.08349 1...
+## 6              Albania  ALB MULTIPOLYGON (((19.75862 42...
+\end{verbatim}
+
+Step 4: Filter rows, e.g., keep only African countries. We will get the
+continent info from rnaturalearth data
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{world\_ne }\OtherTok{\textless{}{-}}\NormalTok{ rnaturalearth}\SpecialCharTok{::}\FunctionTok{ne\_countries}\NormalTok{(}
+  \AttributeTok{scale =} \StringTok{"medium"}\NormalTok{,}
+  \AttributeTok{returnclass =} \StringTok{"sf"}
+\NormalTok{) }\SpecialCharTok{|\textgreater{}} 
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(}
+\NormalTok{    adm0\_a3,}
+\NormalTok{    continent}
+\NormalTok{  ) }\SpecialCharTok{|\textgreater{}} 
+\NormalTok{  sf}\SpecialCharTok{::}\FunctionTok{st\_drop\_geometry}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+Now join the continent info to the renamed boundaries
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{world\_renamed\_with\_cont }\OtherTok{\textless{}{-}}\NormalTok{ world\_renamed }\SpecialCharTok{|\textgreater{}} 
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{left\_join}\NormalTok{(world\_ne, }\AttributeTok{by =} \FunctionTok{c}\NormalTok{(}\StringTok{"iso3"} \OtherTok{=} \StringTok{"adm0\_a3"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+Filtering for Africa:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{africa\_only }\OtherTok{\textless{}{-}}\NormalTok{ world\_renamed\_with\_cont }\SpecialCharTok{|\textgreater{}} 
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{filter}\NormalTok{(continent }\SpecialCharTok{==} \StringTok{"Africa"}\NormalTok{)}
+
+\NormalTok{africa\_only}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Simple feature collection with 51 features and 3 fields
+## Geometry type: MULTIPOLYGON
+## Dimension:     XY
+## Bounding box:  xmin: -25.35984 ymin: -46.98082 xmax: 51.41287 ymax: 37.34131
+## Geodetic CRS:  WGS 84
+## First 10 features:
+##                        country_name iso3 continent
+## 1                            Angola  AGO    Africa
+## 2                          Botswana  BWA    Africa
+## 3                             Congo  COG    Africa
+## 4                     Côte D’Ivoire  CIV    Africa
+## 5                      Burkina Faso  BFA    Africa
+## 6                           Burundi  BDI    Africa
+## 7                             Benin  BEN    Africa
+## 8  Democratic Republic of The Congo  COD    Africa
+## 9          Central African Republic  CAF    Africa
+## 10                          Algeria  DZA    Africa
+##                          geometry
+## 1  MULTIPOLYGON (((13.47062 -5...
+## 2  MULTIPOLYGON (((25.16481 -1...
+## 3  MULTIPOLYGON (((18.49177 3....
+## 4  MULTIPOLYGON (((-5.663248 1...
+## 5  MULTIPOLYGON (((-0.7119468 ...
+## 6  MULTIPOLYGON (((30.41149 -2...
+## 7  MULTIPOLYGON (((3.484148 11...
+## 8  MULTIPOLYGON (((27.41356 5....
+## 9  MULTIPOLYGON (((22.50105 11...
+## 10 MULTIPOLYGON (((8.442687 36...
+\end{verbatim}
+
+Step 5: Check and filter out invalid geometries
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Count initial rows}
+\NormalTok{initial\_rows }\OtherTok{\textless{}{-}} \FunctionTok{nrow}\NormalTok{(africa\_only)}
+
+\CommentTok{\# Remove features where geometry is empty}
+\NormalTok{africa\_valid\_geom }\OtherTok{\textless{}{-}}\NormalTok{ africa\_only }\SpecialCharTok{|\textgreater{}} 
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{filter}\NormalTok{(}\SpecialCharTok{!}\NormalTok{sf}\SpecialCharTok{::}\FunctionTok{st\_is\_empty}\NormalTok{(geometry))}
+
+\CommentTok{\# Count final rows}
+\NormalTok{final\_rows }\OtherTok{\textless{}{-}} \FunctionTok{nrow}\NormalTok{(africa\_valid\_geom)}
+
+\FunctionTok{print}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\StringTok{"Initial Africa rows:"}\NormalTok{, initial\_rows))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Initial Africa rows: 51"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{print}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\StringTok{"Rows after removing/fixing empty/invalid rows:"}\NormalTok{, final\_rows))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Rows after removing/fixing empty/invalid rows: 51"
+\end{verbatim}
+
+\textbf{Joining Tabular Data to Spatial Data}
+
+Step 1: Load packages and verify data exists
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pacman}\SpecialCharTok{::}\FunctionTok{p\_load}\NormalTok{(sf, dplyr, readr)}
+\end{Highlighting}
+\end{Shaded}
+
+Step 2: Load the dataset aand inspect key columns
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{country\_indicators\_loaded }\OtherTok{\textless{}{-}}\NormalTok{ readr}\SpecialCharTok{::}\FunctionTok{read\_csv}\NormalTok{(}\StringTok{"data/country\_indicators.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Rows: 266 Columns: 7
+## -- Column specification --------------------------------------------------------
+## Delimiter: ","
+## chr (3): country, iso2c, iso3c
+## dbl (4): year, gdp_per_capita, life_expectancy, population
+## 
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{head}\NormalTok{(world\_renamed}\SpecialCharTok{$}\NormalTok{iso3)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "AND" "ARE" "AFG" "ATG" "AIA" "ALB"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{head}\NormalTok{(country\_indicators\_loaded}\SpecialCharTok{$}\NormalTok{iso3c)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "AFG" "AFE" "AFW" "ALB" "DZA" "ASM"
+\end{verbatim}
+
+Step 3: Perform the left join
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{world\_data\_joined }\OtherTok{\textless{}{-}}\NormalTok{ world\_renamed }\SpecialCharTok{|\textgreater{}} 
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{left\_join}\NormalTok{(country\_indicators\_loaded, }\AttributeTok{by =} \FunctionTok{c}\NormalTok{(}\StringTok{"iso3"} \OtherTok{=} \StringTok{"iso3c"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+Step 4: Inspect the result
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{glimpse}\NormalTok{(world\_data\_joined)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Rows: 257
+## Columns: 9
+## $ country_name    <chr> "Andorra", "United Arab Emirates", "Afghanistan", "Ant~
+## $ iso3            <chr> "AND", "ARE", "AFG", "ATG", "AIA", "ALB", "ARM", "AGO"~
+## $ country         <chr> "Andorra", "United Arab Emirates", "Afghanistan", "Ant~
+## $ iso2c           <chr> "AD", "AE", "AF", "AG", NA, "AL", "AM", "AO", NA, "AR"~
+## $ year            <dbl> 2020, 2020, 2020, 2020, NA, 2020, 2020, 2020, NA, 2020~
+## $ gdp_per_capita  <dbl> 37361.0901, 37173.8754, 510.7871, 15360.4544, NA, 5370~
+## $ life_expectancy <dbl> 79.41800, 81.93600, 61.45400, 77.16100, NA, 77.82400, ~
+## $ population      <dbl> 77380, 9401038, 39068979, 91846, NA, 2837849, 2961500,~
+## $ geometry        <MULTIPOLYGON [°]> MULTIPOLYGON (((1.53521 42...., MULTIPOLY~
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{na\_count }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{(}\FunctionTok{is.na}\NormalTok{(world\_data\_joined}\SpecialCharTok{$}\NormalTok{population))}
+\NormalTok{na\_count}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 43
+\end{verbatim}
+
+\textbf{Saving Your Cleaned Data}
+
+Step 1: Load required package
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pacman}\SpecialCharTok{::}\FunctionTok{p\_load}\NormalTok{(sf)}
+\end{Highlighting}
+\end{Shaded}
+
+Step 2: Define the output path
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{output\_filename }\OtherTok{\textless{}{-}} \StringTok{"world\_data\_cleaned\_joined.gpkg"}
+\FunctionTok{message}\NormalTok{(}\StringTok{"Saving cleaned data to: "}\NormalTok{, output\_filename)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Saving cleaned data to: world_data_cleaned_joined.gpkg
+\end{verbatim}
+
+Step 3: Write the GeoPackage
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{sf}\SpecialCharTok{::}\FunctionTok{st\_write}\NormalTok{(}
+\NormalTok{  world\_data\_joined, output\_filename, }\AttributeTok{delete\_layer =} \ConstantTok{TRUE}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning in CPL_get_gdal_drivers(0): GDAL Error 1: libnetcdf.so.22: cannot open
+## shared object file: No such file or directory
+## Warning in CPL_get_gdal_drivers(0): GDAL Error 1: libnetcdf.so.22: cannot open
+## shared object file: No such file or directory
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in CPL_get_gdal_drivers(0): GDAL Error 1: libmariadb.so.3: cannot open
+## shared object file: No such file or directory
+## Warning in CPL_get_gdal_drivers(0): GDAL Error 1: libmariadb.so.3: cannot open
+## shared object file: No such file or directory
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in CPL_get_gdal_drivers(0): GDAL Error 1: libnetcdf.so.22: cannot open
+## shared object file: No such file or directory
+## Warning in CPL_get_gdal_drivers(0): GDAL Error 1: libnetcdf.so.22: cannot open
+## shared object file: No such file or directory
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in CPL_get_gdal_drivers(0): GDAL Error 1: libmariadb.so.3: cannot open
+## shared object file: No such file or directory
+## Warning in CPL_get_gdal_drivers(0): GDAL Error 1: libmariadb.so.3: cannot open
+## shared object file: No such file or directory
+\end{verbatim}
+
+\begin{verbatim}
+## Deleting layer `world_data_cleaned_joined' using driver `GPKG'
+## Writing layer `world_data_cleaned_joined' to data source 
+##   `world_data_cleaned_joined.gpkg' using driver `GPKG'
+## Writing 257 features with 8 fields and geometry type Multi Polygon.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{message}\NormalTok{(}\StringTok{"Data saved successfully!"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Data saved successfully!
+\end{verbatim}
+
+\end{document}

@@ -1,0 +1,272 @@
+---
+title: "Chapter 3"
+author: "The Caveman Coder"
+date: "2025-10-27"
+output:
+  pdf_document: default
+  html_document: default
+editor_options:
+  markdown:
+    wrap: 72
+---
+
+## Concepts: Finding Your Ingredients and Checking Quality
+
+Where to find reliable spatial data:  
+
+- Natural Earth (naturlearthdata.com)
+    - Global datasets at small, medium, and large scales\
+    - Contains physical features like coastlines, rivers, lakes\
+    - Contains cultural features like country, borders, cities, etc. 
+    - Belongs to public domain, easy to use legally! - Format is usually Shapefiles  
+- OpenStreeMap (OSM) (openstreetmap.org)  
+    - Like wikipedia but for maps  
+    - Contains user-contributed details like roads, buildings, and other
+points of interest  
+    - Free to use (with proper attribution)  
+    - Data quality varies by region (more mappers, more detail)  
+    - Data structure can be quite complex  
+    - Format may be a special OSM format or extracts (Shapefile or
+GeoPackage)  
+- GADM (gadm.org)  
+    - Database of Global Administrative Areas\
+    - Provides administrative boundaries for nearly all countries\
+    - Consistent source for administrative boundaries worldwide - Easy to
+access via the `geodata` package\
+    - Boundaries might not perfectly match official national boundaries\
+    - Format can be Shapefile, GeoPackage, or via `geodata`\
+- Government Geospatial Portals\
+    - data.gov, data.gov.uk, national mapping agency websites\
+    - Can be very detailed\
+    - Licensing terms may vary\
+    - Format is highly variable, depending on the agency
+
+Search Strategy:  
+
+1. Start with `naturalearth` or `geodata` packages if
+you need general world/country/state boundaries.\
+2. Consider `osmdata` package to access OpenStreetMap if you need
+detailed streets, buildings, cafes, parks, and other points of
+interest.\
+3. Search for "[City/State/Country] GIS data portal" or "XX spatial data
+[Location]".
+
+How to check the quality of your geospatial data: 1. Check the metadata.
+Good spatial data should come with information on the source, date of
+creation, description or abstract, CRS, scale or resolution, accuracy,
+limitations, known issues, license or use constraints.
+
+If metadata is missing, be extra critical.
+
+If available, prefer GeoPackage (\*.gpkg) for vector data. If you get a
+Shapefile, make sure that you have all its component files together
+especially the `.prj` file.
+
+Ethical Considerations: When choosing data, watch out for source bias,
+proper representation, and privacy.
+
+**Being a good cartographer means being tecknicallyh skilled AND
+ethically aware.**
+
+## Hands-On: Loading and Cleaning Your Own Data
+
+**Loading Vector Data**
+
+Step 1: Load necessary packages
+
+```{r}
+if (!requireNamespace("pacman", quietly = TRUE)) {
+  install.packates("pacman")
+}
+library(pacman)
+pacman::p_load(sf, dplyr)
+```
+
+Step 2. Load the GeoPackage file using `st_read()`
+
+```{r}
+world_boundaries_loaded <- sf::st_read("data/world_boundaries.gpkg")
+```
+
+Step 3: Inspect the loaded data
+
+```{r}
+class(world_boundaries_loaded)
+head(world_boundaries_loaded)
+sf::st_crs(world_boundaries_loaded)
+
+# Make the object variable available outside the chunk if needed
+assign(
+  "world_boundaries_loaded",
+  world_boundaries_loaded,
+  envir = .GlobalEnv
+)
+```
+
+**Loading Tabular Data**
+
+Step 1: Loading necessary packages
+
+```{r}
+pacman::p_load(readr, dplyr)
+```
+
+Step 2: Load the CSV file using `read_csv()`
+
+```{r}
+country_indicators_loaded <- readr::read_csv("data/country_indicators.csv")
+```
+
+Step 3: Inspect the loaded data
+
+```{r}
+class(country_indicators_loaded)
+head(country_indicators_loaded)
+glimpse(country_indicators_loaded)
+
+# Make the object available outside the chunk if needed
+assign(
+  "country_indicators_loaded",
+  country_indicators_loaded,
+  envir = .GlobalEnv
+)
+```
+
+**Basic Data Cleaning with `dplyr`**
+
+Step 1: Ensure packages and data are ready
+
+```{r}
+pacman::p_load(sf, dplyr, rnaturalearth)
+```
+
+Step 2: Select only needed columns. For this exercise, we only need the
+name, iso code, and geometry for our map.
+
+```{r}
+# world_boundaries_loaded <- sf::st_read("world_boundaries.gpkg")
+sf::st_geometry(world_boundaries_loaded) <- "geometry"
+world_selected <- world_boundaries_loaded |> 
+  dplyr::select(
+    dplyr::any_of(
+      c("NAME_ENGL", "ISO3_CODE")
+    ), geometry
+  )
+head(world_selected)
+```
+
+Step 3: Rename columns for easier use
+
+```{r}
+world_renamed <- world_selected |> 
+  dplyr::rename(
+    country_name = NAME_ENGL,
+    iso3 = ISO3_CODE
+  )
+
+head(world_renamed)
+```
+
+Step 4: Filter rows, e.g., keep only African countries. We will get the
+continent info from rnaturalearth data
+
+```{r}
+world_ne <- rnaturalearth::ne_countries(
+  scale = "medium",
+  returnclass = "sf"
+) |> 
+  dplyr::select(
+    adm0_a3,
+    continent
+  ) |> 
+  sf::st_drop_geometry()
+```
+
+Now join the continent info to the renamed boundaries
+
+```{r}
+world_renamed_with_cont <- world_renamed |> 
+  dplyr::left_join(world_ne, by = c("iso3" = "adm0_a3"))
+```
+
+Filtering for Africa:
+
+```{r}
+africa_only <- world_renamed_with_cont |> 
+  dplyr::filter(continent == "Africa")
+
+africa_only
+```
+
+Step 5: Check and filter out invalid geometries
+
+```{r}
+# Count initial rows
+initial_rows <- nrow(africa_only)
+
+# Remove features where geometry is empty
+africa_valid_geom <- africa_only |> 
+  dplyr::filter(!sf::st_is_empty(geometry))
+
+# Count final rows
+final_rows <- nrow(africa_valid_geom)
+
+print(paste("Initial Africa rows:", initial_rows))
+print(paste("Rows after removing/fixing empty/invalid rows:", final_rows))
+```
+
+**Joining Tabular Data to Spatial Data**
+
+Step 1: Load packages and verify data exists
+
+```{r}
+pacman::p_load(sf, dplyr, readr)
+```
+
+Step 2: Load the dataset aand inspect key columns
+
+```{r}
+country_indicators_loaded <- readr::read_csv("data/country_indicators.csv")
+head(world_renamed$iso3)
+head(country_indicators_loaded$iso3c)
+```
+
+Step 3: Perform the left join
+
+```{r}
+world_data_joined <- world_renamed |> 
+  dplyr::left_join(country_indicators_loaded, by = c("iso3" = "iso3c"))
+```
+
+Step 4: Inspect the result
+
+```{r}
+glimpse(world_data_joined)
+na_count <- sum(is.na(world_data_joined$population))
+na_count
+```
+
+**Saving Your Cleaned Data**
+
+Step 1: Load required package
+
+```{r}
+pacman::p_load(sf)
+```
+
+Step 2: Define the output path
+
+```{r}
+output_filename <- "world_data_cleaned_joined.gpkg"
+message("Saving cleaned data to: ", output_filename)
+```
+
+Step 3: Write the GeoPackage
+
+```{r}
+sf::st_write(
+  world_data_joined, output_filename, delete_layer = TRUE
+)
+message("Data saved successfully!")
+```
+
