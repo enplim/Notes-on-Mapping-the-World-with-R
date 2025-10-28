@@ -5,7 +5,7 @@ Progress:
 1. [x] Your Mapping Cockpit: Meet RStudio
 2. [x] Understanding Spatial Data in R: Shapes, Grids, and Addresses
 3. [x] Finding and Preparing Spatial Data: Your ingredients
-4. [ ] Creating Your First Thematic Map with ggplot2
+4. [x] Creating Your First Thematic Map with ggplot2
 5. [ ] Point Maps and Geographic Visualization
 6. [ ] Line and Network Maps: Tracing Paths
 7. [ ] Understanding Raster Data: The World in Pixels

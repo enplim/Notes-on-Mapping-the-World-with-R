@@ -1,0 +1,224 @@
+---
+title: "Chapter 4"
+author: "The Caveman Coder"
+date: "2025-10-28"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+## Hands-On: My First `ggplot2` Thematic Map
+
+Step 1: Load necessary packages
+```{r}
+library(pacman)
+pacman::p_load(tidyverse)
+```
+
+Step 2: Load the cleaned and joined data
+```{r}
+world_data_loaded <- sf::st_read("world_data_cleaned_joined.gpkg")
+```
+
+Step 3: Plot a basic choropleth
+```{r}
+map_plot_basic <- world_data_loaded |> 
+  ggplot() +
+  geom_sf(
+    mapping = aes(fill = gdp_per_capita),
+    color = "white",
+    linewidth = 0.1
+  ) +
+  labs(
+    title = "GDP per capita (2020)",
+    fill = "US Dollars"
+  ) + 
+  theme_minimal()
+
+map_plot_basic
+```
+
+
+### Customizing colors
+
+Create a choropleth map using the Viridis "rocket" palette with log10 scaling:
+```{r}
+map_plot_viridis <- world_data_loaded |> 
+  ggplot() +
+  geom_sf(
+    mapping = aes(fill = gdp_per_capita),
+    color = "white",
+    linewidth = 0.1
+  ) + 
+  scale_fill_viridis_c(
+    option = "rocket",
+    direction = -1,
+    name = "US dollars",
+    na.value = "grey80",
+    trans = "log10",
+    labels = scales::label_log(digits = 2) # use spacial labels for log scale
+  ) +
+  labs(title = "GDP per capita (2020)") +
+  theme_minimal() +
+  theme(
+    legend.position = "bottom",
+    legend.key.width = grid::unit(1.5, "cm")
+  )
+
+map_plot_viridis
+```
+
+
+### Adding Other Map Elements
+
+Adding scale bars and north arrow using the `ggspatial` package:
+```{r}
+library(ggspatial)
+
+map_plot_elements <- world_data_loaded |> 
+  ggplot() +
+  geom_sf(
+    mapping = aes(fill = gdp_per_capita),
+    color = "white",
+    linewidth = 0.1
+  ) +
+  scale_fill_viridis_c(
+    option = "rocket",
+    direction = -1, # reverse pallete, lighter colors -> lower value
+    name = "US dollars", # legend title
+    na.value = "grey80",
+    trans = "log10", # apply log transformation bec. density is highly skewed
+    labels = scales::label_log(digits = 2)
+  ) +
+  # ADD GGSPATIAL LAYERS
+  ggspatial::annotation_scale(
+    location = "bl",
+    width_hint = 0.3,
+    style = "ticks"
+  ) +
+  ggspatial::annotation_north_arrow(
+    location = "tr",
+    which_north = "true",
+    pad_x = unit(0.1, "in"),
+    pad_y = unit(1, "in"),
+    style = ggspatial::north_arrow_fancy_orienteering
+  ) +
+  # Add labels and theme
+  labs(title = "GDP per capita (2020)") +
+  theme_void() +
+  theme(
+    legend.position = "bottom",
+    legend.key.width = unit(1.5, "cm"),
+    plot.title = element_text(hjust = 0.5, face = "bold") # Center title
+  )
+
+
+map_plot_elements
+
+# Save the previous map
+assign("plot_original", map_plot_viridis, envir = .GlobalEnv)
+```
+
+
+### Project Exercise: Mapping African Indicators
+
+Create a choropleth map showing a different indicator for African countries. 
+Goal is to create a static map showing Life Expectancy (`LifeExp`) for African
+countries in the latest year available in the `gapminder` data, using `ggplot2`.
+Choose an appropriate sequential color palette and include a title, legend, and
+caption.
+
+Step 1: Load the packages:
+```{r}
+pacman::p_load(sf, tidyverse, rnaturalearth, gapminder, countrycode, viridis)
+```
+
+Step 2: Prepare the data.
+
+Getting the polygons for African countries:
+```{r}
+africa_sf <- rnaturalearth::ne_countries(
+  scale = "medium",
+  continent = "Africa", 
+  returnclass = "sf"
+) |> 
+  select(name, iso_a3 = adm0_a3, geometry)
+```
+
+
+Filtering `gapminder` data for the latest year:
+```{r}
+# glimpse(gapminder)
+latest_year <- max(gapminder$year)
+
+gapminder_latest <- gapminder |> 
+  filter(year == latest_year) |> 
+  select(country, lifeExp)
+```
+
+Getting the country codes from `countrycode`:
+```{r}
+gapminder_latest <- gapminder_latest |> 
+  mutate(
+    iso_a3 = countrycode::countrycode(
+      country, origin = "country.name", destination = "iso3c"
+    )
+  )
+```
+
+Left-joining `gapminder_latest` with `africa_sf`:
+```{r}
+africa_life_exp_sf <- africa_sf |> 
+  left_join(gapminder_latest, by = "iso_a3") |> 
+  filter(!is.na(lifeExp))
+
+africa_life_exp_sf
+```
+
+Creating the plot:
+```{r}
+africa_map_plot <- africa_life_exp_sf |> 
+  ggplot() +
+  geom_sf(
+    mapping = aes(fill = lifeExp),
+    color = "white",
+    linewidth = 0.1
+  ) +
+  scale_fill_viridis_c(
+    option = "plasma",
+    direction = -1,
+    trans = "log10",
+    name = "Life Exp.",
+    na.value = "grey80"
+  ) +
+  labs(
+    title = paste("African Life Expectancy", latest_year), 
+    caption = "Data: Gapminder & Natural Earth"
+  ) +
+  theme_void() +
+  theme(
+    legend.position.inside = c(0.15, 0.8),
+    legend.key.width = unit(1.5, "cm"),
+    plot.title = element_text(hjust = 0.5, face = "bold"), # Center title
+    plot.caption = element_text(hjust = 0.95, vjust = 30)
+  )
+
+africa_map_plot
+```
+
+Saving the plot:
+```{r}
+ggsave(
+  "africa_life_exp.png",
+  africa_map_plot,
+  width = 7,
+  height = 8,
+  dpi = 600
+)
+```
+
+
+
+
+
+
