@@ -1,0 +1,261 @@
+---
+title: "Chapter5"
+author: "The Caveman Coder"
+date: "2025-10-29"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+Simple solutions to overplotting:  
+
+- Transparency: change the alpha values.  
+- Use smaller point size.  
+- Apply jittering.
+
+
+Ethical considerations when mapping:  
+
+- Privacy: avoid mapping precise locations that could identify individuals or
+reveal sensitive information. Aggregate points if necessary.  
+- Data Bias: Crowd-sourced data reflects where people contributed. 
+
+
+## Hands-on Plotting points with `ggplot2`
+
+### Setup: Load Packages and Get Data
+
+Step 1: Load necessary packages:
+```{r}
+library(pacman)
+p_load(sf, tidyverse, rnaturalearth, maps, ggrepel)
+```
+
+Step 2: Get world boundaries for background map
+```{r}
+world_map_background <- rnaturalearth::ne_countries(
+  scale = "medium",
+  returnclass = "sf"
+) |> 
+  select(name, iso_a2, geometry)
+
+world_map_background
+```
+
+Step 3: Get world city data:
+```{r}
+cities_df <- maps::world.cities |> 
+  filter(pop > 1000000) |> 
+  select(name, country.etc, pop, lat, long)
+
+head(cities_df)
+```
+
+Convert the `cities_df` into an `sf` object:
+```{r}
+cities_sf <- cities_df |> 
+  sf::st_as_sf(
+    coords = c("long", "lat"), # Important: Longitude first!
+    crs = 4326 # Assume WGS84
+  )
+
+head(cities_sf)
+```
+
+
+### Creating a Simple Dot Map
+
+```{r}
+dot_map <- world_map_background |> 
+  ggplot() +
+  # Layer 1: World map background, light gray, light borders
+  geom_sf(
+    fill = "grey80",
+    color = "white",
+    linewidth = 0.1
+  ) +
+  # Layer 2: City points
+  geom_sf(
+    data = cities_sf,
+    color = "purple",
+    size = 1,
+    shape = 16, # solid, circle shape
+    alpha = 0.6
+  ) +
+  # Title and theme
+  labs(title = "World Cities with Population > 1 Million") +
+  theme_minimal() +
+  theme(axis.text = element_blank()) # to hide axis labels
+
+dot_map
+```
+
+
+### Creating a Bubble Map (Size by Population)
+```{r}
+bubble_map <- world_map_background |> 
+  ggplot() +
+  # Layer 1: World map background, light gray, light borders
+  geom_sf(
+    fill = "grey80",
+    color = "white",
+    linewidth = 0.1
+  ) +
+  # Layer 2: City points mapped to population size
+  geom_sf(
+    data = cities_sf,
+    mapping = aes(size = pop),
+    color = "dodgerblue",
+    shape = 16, # solid, circle shape
+    alpha = 0.6
+  ) +
+  # Scaling to circle area to population size
+  scale_size_area(
+    name = "Population", # Legend title
+    max_size = 5, # Max bubble size on plot
+    labels = scales::label_number(scale = 1e-6, suffix = "M") # Label formatting
+  ) +
+  # Title and theme
+  labs(
+    title = "World Cities with Population (> 1M)",
+    caption = "Data: maps::world.cities"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text = element_blank(), # to hide axis labels
+    legend.position = "bottom"
+  )
+bubble_map
+```
+
+
+### Styling Points by Category (Color/Shape)
+
+Extract continent polygons from `rnaturalearth`:
+```{r}
+world_polygons_cont <- rnaturalearth::ne_countries(
+  scale = "medium",
+  returnclass = "sf"
+) |> 
+  select(name, continent, geometry)
+  # sf::st_make_valid() # fix any self-crossing or invalid rings
+
+head(world_polygons_cont)
+tail(world_polygons_cont)
+```
+
+Make sure that `cites_sf` and `world_polygons_sf` use the same CRS:
+```{r}
+cities_sf <- sf::st_transform(cities_sf, sf::st_crs(world_polygons_cont))
+```
+
+Merge `cities_sf` and `world_polygons_sf`. Use `st_within` to find which polygon
+each city point is "within".
+```r
+sf::st_join(
+  cities_sf, world_polygons_cont,
+  join = sf::st_within
+)
+```
+
+=============================
+
+### Handling Labels with `ggrepel`
+
+Get the labels for North America:
+
+
+### Project Exercise: Mapping German Cities with Population Markers
+
+Step 1: Load necessary packages:
+```{r}
+p_load(sf, tidyverse, maps, rnaturalearth, ggplot2, scales, ggrepel)
+```
+
+Step 2: Get Germany Boundary
+```{r}
+germany_boundary_sf <- rnaturalearth::ne_countries(
+  country = "Germany",
+  scale = "medium",
+  returnclass = "sf"
+)
+
+head(germany_boundary_sf)
+```
+
+Step 3: Load and Prepare City Data:
+```{r}
+german_cities_df <- maps::world.cities |> 
+  filter(country.etc == "Germany") |> 
+  filter(!is.na(pop)) |> 
+  select(name, pop, long, lat)
+
+german_cities_sf <- german_cities_df |> sf::st_as_sf(
+  coords = c("long", "lat"),
+  crs = 4326
+)
+
+head(german_cities_sf)
+```
+
+Step 4: Create Map
+```{r}
+german_bubble_map <- ggplot() +
+  # Background layer
+  geom_sf(
+    data = germany_boundary_sf,
+    fill = "grey80",
+    color = "grey70"
+  ) +
+  geom_sf(
+    data = german_cities_sf,
+    mapping = aes(size = pop),
+    color = "darkred",
+    shape = 16, 
+    alpha = 0.5
+  ) +
+  scale_size_area(
+    name = "Population",
+    max_size = 12,
+    labels = scales::label_number(scale = 1e-3, suffix = "K") # Label formatting
+  ) +
+  labs(
+    title = "Major German Cities by Population", 
+    caption = "Data: maps::world.cities"
+  ) +
+  theme_void()
+
+german_bubble_map
+```
+
+Add city labels:
+```{r}
+top5_cities <- german_cities_sf |> 
+  arrange(desc(pop)) |> 
+  head(5) |> 
+  mutate(
+    lon = sf::st_coordinates(geometry)[,1],
+    lat = sf::st_coordinates(geometry)[,2]
+  )
+
+top5_cities
+
+german_bubble_map +
+  geom_label_repel(
+    data = top5_cities,
+    mapping = aes(x = lon, y = lat, label = name),
+    size = 2.5, # font size
+    min.segment.length = 0,
+    max.overlaps = 30,
+    force = 0.5, # how strongly labels push away
+    box.padding = 0.2
+  )
+```
+
+
+
+
+
+
+
+

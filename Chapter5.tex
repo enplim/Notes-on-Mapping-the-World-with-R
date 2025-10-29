@@ -1,0 +1,594 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Chapter5},
+  pdfauthor={The Caveman Coder},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Chapter5}
+\author{The Caveman Coder}
+\date{2025-10-29}
+
+\begin{document}
+\maketitle
+
+Simple solutions to overplotting:
+
+\begin{itemize}
+\tightlist
+\item
+  Transparency: change the alpha values.\\
+\item
+  Use smaller point size.\\
+\item
+  Apply jittering.
+\end{itemize}
+
+Ethical considerations when mapping:
+
+\begin{itemize}
+\tightlist
+\item
+  Privacy: avoid mapping precise locations that could identify
+  individuals or reveal sensitive information. Aggregate points if
+  necessary.\\
+\item
+  Data Bias: Crowd-sourced data reflects where people contributed.
+\end{itemize}
+
+\subsection{\texorpdfstring{Hands-on Plotting points with
+\texttt{ggplot2}}{Hands-on Plotting points with ggplot2}}\label{hands-on-plotting-points-with-ggplot2}
+
+\subsubsection{Setup: Load Packages and Get
+Data}\label{setup-load-packages-and-get-data}
+
+Step 1: Load necessary packages:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(pacman)}
+\FunctionTok{p\_load}\NormalTok{(sf, tidyverse, rnaturalearth, maps, ggrepel)}
+\end{Highlighting}
+\end{Shaded}
+
+Step 2: Get world boundaries for background map
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{world\_map\_background }\OtherTok{\textless{}{-}}\NormalTok{ rnaturalearth}\SpecialCharTok{::}\FunctionTok{ne\_countries}\NormalTok{(}
+  \AttributeTok{scale =} \StringTok{"medium"}\NormalTok{,}
+  \AttributeTok{returnclass =} \StringTok{"sf"}
+\NormalTok{) }\SpecialCharTok{|\textgreater{}} 
+  \FunctionTok{select}\NormalTok{(name, iso\_a2, geometry)}
+
+\NormalTok{world\_map\_background}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Simple feature collection with 242 features and 2 fields
+## Geometry type: MULTIPOLYGON
+## Dimension:     XY
+## Bounding box:  xmin: -180 ymin: -89.99893 xmax: 180 ymax: 83.59961
+## Geodetic CRS:  WGS 84
+## First 10 features:
+##          name iso_a2                       geometry
+## 1    Zimbabwe     ZW MULTIPOLYGON (((31.28789 -2...
+## 2      Zambia     ZM MULTIPOLYGON (((30.39609 -1...
+## 3       Yemen     YE MULTIPOLYGON (((53.08564 16...
+## 4     Vietnam     VN MULTIPOLYGON (((104.064 10....
+## 5   Venezuela     VE MULTIPOLYGON (((-60.82119 9...
+## 6     Vatican     VA MULTIPOLYGON (((12.43916 41...
+## 7     Vanuatu     VU MULTIPOLYGON (((166.7458 -1...
+## 8  Uzbekistan     UZ MULTIPOLYGON (((70.94678 42...
+## 9     Uruguay     UY MULTIPOLYGON (((-53.37061 -...
+## 10 Micronesia     FM MULTIPOLYGON (((162.9832 5....
+\end{verbatim}
+
+Step 3: Get world city data:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cities\_df }\OtherTok{\textless{}{-}}\NormalTok{ maps}\SpecialCharTok{::}\NormalTok{world.cities }\SpecialCharTok{|\textgreater{}} 
+  \FunctionTok{filter}\NormalTok{(pop }\SpecialCharTok{\textgreater{}} \DecValTok{1000000}\NormalTok{) }\SpecialCharTok{|\textgreater{}} 
+  \FunctionTok{select}\NormalTok{(name, country.etc, pop, lat, long)}
+
+\FunctionTok{head}\NormalTok{(cities\_df)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##          name country.etc     pop    lat   long
+## 1      'Amman      Jordan 1303197  31.95  35.93
+## 2     Abidjan Ivory Coast 3796677   5.33  -4.03
+## 3       Accra       Ghana 2029143   5.56  -0.20
+## 4       Adana      Turkey 1271894  37.00  35.32
+## 5 Addis Abeba    Ethiopia 2823167   9.03  38.74
+## 6    Adelaide   Australia 1076969 -34.93 138.60
+\end{verbatim}
+
+Convert the \texttt{cities\_df} into an \texttt{sf} object:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cities\_sf }\OtherTok{\textless{}{-}}\NormalTok{ cities\_df }\SpecialCharTok{|\textgreater{}} 
+\NormalTok{  sf}\SpecialCharTok{::}\FunctionTok{st\_as\_sf}\NormalTok{(}
+    \AttributeTok{coords =} \FunctionTok{c}\NormalTok{(}\StringTok{"long"}\NormalTok{, }\StringTok{"lat"}\NormalTok{), }\CommentTok{\# Important: Longitude first!}
+    \AttributeTok{crs =} \DecValTok{4326} \CommentTok{\# Assume WGS84}
+\NormalTok{  )}
+
+\FunctionTok{head}\NormalTok{(cities\_sf)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Simple feature collection with 6 features and 3 fields
+## Geometry type: POINT
+## Dimension:     XY
+## Bounding box:  xmin: -4.03 ymin: -34.93 xmax: 138.6 ymax: 37
+## Geodetic CRS:  WGS 84
+##          name country.etc     pop             geometry
+## 1      'Amman      Jordan 1303197  POINT (35.93 31.95)
+## 2     Abidjan Ivory Coast 3796677   POINT (-4.03 5.33)
+## 3       Accra       Ghana 2029143    POINT (-0.2 5.56)
+## 4       Adana      Turkey 1271894     POINT (35.32 37)
+## 5 Addis Abeba    Ethiopia 2823167   POINT (38.74 9.03)
+## 6    Adelaide   Australia 1076969 POINT (138.6 -34.93)
+\end{verbatim}
+
+\subsubsection{Creating a Simple Dot
+Map}\label{creating-a-simple-dot-map}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dot\_map }\OtherTok{\textless{}{-}}\NormalTok{ world\_map\_background }\SpecialCharTok{|\textgreater{}} 
+  \FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+}
+  \CommentTok{\# Layer 1: World map background, light gray, light borders}
+  \FunctionTok{geom\_sf}\NormalTok{(}
+    \AttributeTok{fill =} \StringTok{"grey80"}\NormalTok{,}
+    \AttributeTok{color =} \StringTok{"white"}\NormalTok{,}
+    \AttributeTok{linewidth =} \FloatTok{0.1}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \CommentTok{\# Layer 2: City points}
+  \FunctionTok{geom\_sf}\NormalTok{(}
+    \AttributeTok{data =}\NormalTok{ cities\_sf,}
+    \AttributeTok{color =} \StringTok{"purple"}\NormalTok{,}
+    \AttributeTok{size =} \DecValTok{1}\NormalTok{,}
+    \AttributeTok{shape =} \DecValTok{16}\NormalTok{, }\CommentTok{\# solid, circle shape}
+    \AttributeTok{alpha =} \FloatTok{0.6}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \CommentTok{\# Title and theme}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"World Cities with Population \textgreater{} 1 Million"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{axis.text =} \FunctionTok{element\_blank}\NormalTok{()) }\CommentTok{\# to hide axis labels}
+
+\NormalTok{dot\_map}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{Chapter5_files/figure-latex/unnamed-chunk-5-1.pdf}}
+
+\subsubsection{Creating a Bubble Map (Size by
+Population)}\label{creating-a-bubble-map-size-by-population}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{bubble\_map }\OtherTok{\textless{}{-}}\NormalTok{ world\_map\_background }\SpecialCharTok{|\textgreater{}} 
+  \FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+}
+  \CommentTok{\# Layer 1: World map background, light gray, light borders}
+  \FunctionTok{geom\_sf}\NormalTok{(}
+    \AttributeTok{fill =} \StringTok{"grey80"}\NormalTok{,}
+    \AttributeTok{color =} \StringTok{"white"}\NormalTok{,}
+    \AttributeTok{linewidth =} \FloatTok{0.1}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \CommentTok{\# Layer 2: City points mapped to population size}
+  \FunctionTok{geom\_sf}\NormalTok{(}
+    \AttributeTok{data =}\NormalTok{ cities\_sf,}
+    \AttributeTok{mapping =} \FunctionTok{aes}\NormalTok{(}\AttributeTok{size =}\NormalTok{ pop),}
+    \AttributeTok{color =} \StringTok{"dodgerblue"}\NormalTok{,}
+    \AttributeTok{shape =} \DecValTok{16}\NormalTok{, }\CommentTok{\# solid, circle shape}
+    \AttributeTok{alpha =} \FloatTok{0.6}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \CommentTok{\# Scaling to circle area to population size}
+  \FunctionTok{scale\_size\_area}\NormalTok{(}
+    \AttributeTok{name =} \StringTok{"Population"}\NormalTok{, }\CommentTok{\# Legend title}
+    \AttributeTok{max\_size =} \DecValTok{5}\NormalTok{, }\CommentTok{\# Max bubble size on plot}
+    \AttributeTok{labels =}\NormalTok{ scales}\SpecialCharTok{::}\FunctionTok{label\_number}\NormalTok{(}\AttributeTok{scale =} \FloatTok{1e{-}6}\NormalTok{, }\AttributeTok{suffix =} \StringTok{"M"}\NormalTok{) }\CommentTok{\# Label formatting}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \CommentTok{\# Title and theme}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{title =} \StringTok{"World Cities with Population (\textgreater{} 1M)"}\NormalTok{,}
+    \AttributeTok{caption =} \StringTok{"Data: maps::world.cities"}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}
+    \AttributeTok{axis.text =} \FunctionTok{element\_blank}\NormalTok{(), }\CommentTok{\# to hide axis labels}
+    \AttributeTok{legend.position =} \StringTok{"bottom"}
+\NormalTok{  )}
+\NormalTok{bubble\_map}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{Chapter5_files/figure-latex/unnamed-chunk-6-1.pdf}}
+
+\subsubsection{Styling Points by Category
+(Color/Shape)}\label{styling-points-by-category-colorshape}
+
+Extract continent polygons from \texttt{rnaturalearth}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{world\_polygons\_cont }\OtherTok{\textless{}{-}}\NormalTok{ rnaturalearth}\SpecialCharTok{::}\FunctionTok{ne\_countries}\NormalTok{(}
+  \AttributeTok{scale =} \StringTok{"medium"}\NormalTok{,}
+  \AttributeTok{returnclass =} \StringTok{"sf"}
+\NormalTok{) }\SpecialCharTok{|\textgreater{}} 
+  \FunctionTok{select}\NormalTok{(name, continent, geometry)}
+  \CommentTok{\# sf::st\_make\_valid() \# fix any self{-}crossing or invalid rings}
+
+\FunctionTok{head}\NormalTok{(world\_polygons\_cont)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Simple feature collection with 6 features and 2 fields
+## Geometry type: MULTIPOLYGON
+## Dimension:     XY
+## Bounding box:  xmin: -73.36621 ymin: -22.40205 xmax: 109.4449 ymax: 41.9062
+## Geodetic CRS:  WGS 84
+##        name     continent                       geometry
+## 1  Zimbabwe        Africa MULTIPOLYGON (((31.28789 -2...
+## 2    Zambia        Africa MULTIPOLYGON (((30.39609 -1...
+## 3     Yemen          Asia MULTIPOLYGON (((53.08564 16...
+## 4   Vietnam          Asia MULTIPOLYGON (((104.064 10....
+## 5 Venezuela South America MULTIPOLYGON (((-60.82119 9...
+## 6   Vatican        Europe MULTIPOLYGON (((12.43916 41...
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{tail}\NormalTok{(world\_polygons\_cont)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Simple feature collection with 6 features and 2 fields
+## Geometry type: MULTIPOLYGON
+## Dimension:     XY
+## Bounding box:  xmin: -180 ymin: -89.99893 xmax: 180 ymax: 42.64795
+## Geodetic CRS:  WGS 84
+##                name     continent                       geometry
+## 237         Albania        Europe MULTIPOLYGON (((19.34238 41...
+## 238     Afghanistan          Asia MULTIPOLYGON (((66.52227 37...
+## 239 Siachen Glacier          Asia MULTIPOLYGON (((77.04863 35...
+## 240      Antarctica    Antarctica MULTIPOLYGON (((-45.71777 -...
+## 241    Sint Maarten North America MULTIPOLYGON (((-63.12305 1...
+## 242          Tuvalu       Oceania MULTIPOLYGON (((179.2137 -8...
+\end{verbatim}
+
+Make sure that \texttt{cites\_sf} and \texttt{world\_polygons\_sf} use
+the same CRS:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cities\_sf }\OtherTok{\textless{}{-}}\NormalTok{ sf}\SpecialCharTok{::}\FunctionTok{st\_transform}\NormalTok{(cities\_sf, sf}\SpecialCharTok{::}\FunctionTok{st\_crs}\NormalTok{(world\_polygons\_cont))}
+\end{Highlighting}
+\end{Shaded}
+
+Merge \texttt{cities\_sf} and \texttt{world\_polygons\_sf}. Use
+\texttt{st\_within} to find which polygon each city point is ``within''.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{sf}\SpecialCharTok{::}\FunctionTok{st\_join}\NormalTok{(}
+\NormalTok{  cities\_sf, world\_polygons\_cont,}
+  \AttributeTok{join =}\NormalTok{ sf}\SpecialCharTok{::}\NormalTok{st\_within}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+=============================
+
+\subsubsection{\texorpdfstring{Handling Labels with
+\texttt{ggrepel}}{Handling Labels with ggrepel}}\label{handling-labels-with-ggrepel}
+
+Get the labels for North America:
+
+\subsubsection{Project Exercise: Mapping German Cities with Population
+Markers}\label{project-exercise-mapping-german-cities-with-population-markers}
+
+Step 1: Load necessary packages:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{p\_load}\NormalTok{(sf, tidyverse, maps, rnaturalearth, ggplot2, scales, ggrepel)}
+\end{Highlighting}
+\end{Shaded}
+
+Step 2: Get Germany Boundary
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{germany\_boundary\_sf }\OtherTok{\textless{}{-}}\NormalTok{ rnaturalearth}\SpecialCharTok{::}\FunctionTok{ne\_countries}\NormalTok{(}
+  \AttributeTok{country =} \StringTok{"Germany"}\NormalTok{,}
+  \AttributeTok{scale =} \StringTok{"medium"}\NormalTok{,}
+  \AttributeTok{returnclass =} \StringTok{"sf"}
+\NormalTok{)}
+
+\FunctionTok{head}\NormalTok{(germany\_boundary\_sf)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Simple feature collection with 1 feature and 168 fields
+## Geometry type: MULTIPOLYGON
+## Dimension:     XY
+## Bounding box:  xmin: 5.85752 ymin: 47.27881 xmax: 15.0166 ymax: 55.05874
+## Geodetic CRS:  WGS 84
+##          featurecla scalerank labelrank sovereignt sov_a3 adm0_dif level
+## 157 Admin-0 country         1         2    Germany    DEU        0     2
+##                  type tlc   admin adm0_a3 geou_dif geounit gu_a3 su_dif subunit
+## 157 Sovereign country   1 Germany     DEU        0 Germany   DEU      0 Germany
+##     su_a3 brk_diff    name name_long brk_a3 brk_name brk_group abbrev postal
+## 157   DEU        0 Germany   Germany    DEU  Germany      <NA>   Ger.      D
+##                       formal_en formal_fr name_ciawf note_adm0 note_brk
+## 157 Federal Republic of Germany      <NA>    Germany      <NA>     <NA>
+##     name_sort name_alt mapcolor7 mapcolor8 mapcolor9 mapcolor13  pop_est
+## 157   Germany     <NA>         2         5         5          1 83132799
+##     pop_rank pop_year  gdp_md gdp_year                 economy
+## 157       16     2019 3861123     2019 1. Developed region: G7
+##               income_grp fips_10 iso_a2 iso_a2_eh iso_a3 iso_a3_eh iso_n3
+## 157 1. High income: OECD      GM     DE        DE    DEU       DEU    276
+##     iso_n3_eh un_a3 wb_a2 wb_a3   woe_id woe_id_eh                   woe_note
+## 157       276   276    DE   DEU 23424829  23424829 Exact WOE match as country
+##     adm0_iso adm0_diff adm0_tlc adm0_a3_us adm0_a3_fr adm0_a3_ru adm0_a3_es
+## 157      DEU      <NA>      DEU        DEU        DEU        DEU        DEU
+##     adm0_a3_cn adm0_a3_tw adm0_a3_in adm0_a3_np adm0_a3_pk adm0_a3_de
+## 157        DEU        DEU        DEU        DEU        DEU        DEU
+##     adm0_a3_gb adm0_a3_br adm0_a3_il adm0_a3_ps adm0_a3_sa adm0_a3_eg
+## 157        DEU        DEU        DEU        DEU        DEU        DEU
+##     adm0_a3_ma adm0_a3_pt adm0_a3_ar adm0_a3_jp adm0_a3_ko adm0_a3_vn
+## 157        DEU        DEU        DEU        DEU        DEU        DEU
+##     adm0_a3_tr adm0_a3_id adm0_a3_pl adm0_a3_gr adm0_a3_it adm0_a3_nl
+## 157        DEU        DEU        DEU        DEU        DEU        DEU
+##     adm0_a3_se adm0_a3_bd adm0_a3_ua adm0_a3_un adm0_a3_wb continent region_un
+## 157        DEU        DEU        DEU        -99        -99    Europe    Europe
+##          subregion             region_wb name_len long_len abbrev_len tiny
+## 157 Western Europe Europe & Central Asia        7        7          4  -99
+##     homepart min_zoom min_label max_label  label_x  label_y      ne_id
+## 157        1        0       1.7       6.7 9.678348 50.96173 1159320539
+##     wikidataid name_ar name_bn     name_de name_en  name_es name_fa   name_fr
+## 157       Q183 ألمانيا জার্মানি Deutschland Germany Alemania   آلمان Allemagne
+##      name_el name_he name_hi     name_hu name_id  name_it name_ja name_ko
+## 157 Γερμανία  גרמניה   जर्मनी Németország  Jerman Germania  ドイツ    독일
+##       name_nl name_pl  name_pt  name_ru  name_sv name_tr   name_uk name_ur
+## 157 Duitsland  Niemcy Alemanha Германия Tyskland Almanya Німеччина   جرمنی
+##     name_vi name_zh name_zht      fclass_iso tlc_diff      fclass_tlc fclass_us
+## 157     Đức    德国     德國 Admin-0 country     <NA> Admin-0 country      <NA>
+##     fclass_fr fclass_ru fclass_es fclass_cn fclass_tw fclass_in fclass_np
+## 157      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+##     fclass_pk fclass_de fclass_gb fclass_br fclass_il fclass_ps fclass_sa
+## 157      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+##     fclass_eg fclass_ma fclass_pt fclass_ar fclass_jp fclass_ko fclass_vn
+## 157      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+##     fclass_tr fclass_id fclass_pl fclass_gr fclass_it fclass_nl fclass_se
+## 157      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+##     fclass_bd fclass_ua                       geometry
+## 157      <NA>      <NA> MULTIPOLYGON (((9.524023 47...
+\end{verbatim}
+
+Step 3: Load and Prepare City Data:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{german\_cities\_df }\OtherTok{\textless{}{-}}\NormalTok{ maps}\SpecialCharTok{::}\NormalTok{world.cities }\SpecialCharTok{|\textgreater{}} 
+  \FunctionTok{filter}\NormalTok{(country.etc }\SpecialCharTok{==} \StringTok{"Germany"}\NormalTok{) }\SpecialCharTok{|\textgreater{}} 
+  \FunctionTok{filter}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(pop)) }\SpecialCharTok{|\textgreater{}} 
+  \FunctionTok{select}\NormalTok{(name, pop, long, lat)}
+
+\NormalTok{german\_cities\_sf }\OtherTok{\textless{}{-}}\NormalTok{ german\_cities\_df }\SpecialCharTok{|\textgreater{}}\NormalTok{ sf}\SpecialCharTok{::}\FunctionTok{st\_as\_sf}\NormalTok{(}
+  \AttributeTok{coords =} \FunctionTok{c}\NormalTok{(}\StringTok{"long"}\NormalTok{, }\StringTok{"lat"}\NormalTok{),}
+  \AttributeTok{crs =} \DecValTok{4326}
+\NormalTok{)}
+
+\FunctionTok{head}\NormalTok{(german\_cities\_sf)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Simple feature collection with 6 features and 2 fields
+## Geometry type: POINT
+## Dimension:     XY
+## Bounding box:  xmin: 6.09 ymin: 48.63 xmax: 10.09 ymax: 53.04
+## Geodetic CRS:  WGS 84
+##     name    pop            geometry
+## 1 Aachen 273472  POINT (6.09 50.77)
+## 2  Aalen  67188 POINT (10.09 48.85)
+## 3 Achern  24637  POINT (8.08 48.63)
+## 4  Achim  30109  POINT (9.01 53.04)
+## 5  Ahaus  38293  POINT (7.01 52.09)
+## 6  Ahlen  55265  POINT (7.88 51.77)
+\end{verbatim}
+
+Step 4: Create Map
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{german\_bubble\_map }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+}
+  \CommentTok{\# Background layer}
+  \FunctionTok{geom\_sf}\NormalTok{(}
+    \AttributeTok{data =}\NormalTok{ germany\_boundary\_sf,}
+    \AttributeTok{fill =} \StringTok{"grey80"}\NormalTok{,}
+    \AttributeTok{color =} \StringTok{"grey70"}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{geom\_sf}\NormalTok{(}
+    \AttributeTok{data =}\NormalTok{ german\_cities\_sf,}
+    \AttributeTok{mapping =} \FunctionTok{aes}\NormalTok{(}\AttributeTok{size =}\NormalTok{ pop),}
+    \AttributeTok{color =} \StringTok{"darkred"}\NormalTok{,}
+    \AttributeTok{shape =} \DecValTok{16}\NormalTok{, }
+    \AttributeTok{alpha =} \FloatTok{0.5}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{scale\_size\_area}\NormalTok{(}
+    \AttributeTok{name =} \StringTok{"Population"}\NormalTok{,}
+    \AttributeTok{max\_size =} \DecValTok{12}\NormalTok{,}
+    \AttributeTok{labels =}\NormalTok{ scales}\SpecialCharTok{::}\FunctionTok{label\_number}\NormalTok{(}\AttributeTok{scale =} \FloatTok{1e{-}3}\NormalTok{, }\AttributeTok{suffix =} \StringTok{"K"}\NormalTok{) }\CommentTok{\# Label formatting}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{title =} \StringTok{"Major German Cities by Population"}\NormalTok{, }
+    \AttributeTok{caption =} \StringTok{"Data: maps::world.cities"}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{theme\_void}\NormalTok{()}
+
+\NormalTok{german\_bubble\_map}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{Chapter5_files/figure-latex/unnamed-chunk-12-1.pdf}}
+
+Add city labels:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{top5\_cities }\OtherTok{\textless{}{-}}\NormalTok{ german\_cities\_sf }\SpecialCharTok{|\textgreater{}} 
+  \FunctionTok{arrange}\NormalTok{(}\FunctionTok{desc}\NormalTok{(pop)) }\SpecialCharTok{|\textgreater{}} 
+  \FunctionTok{head}\NormalTok{(}\DecValTok{5}\NormalTok{) }\SpecialCharTok{|\textgreater{}} 
+  \FunctionTok{mutate}\NormalTok{(}
+    \AttributeTok{lon =}\NormalTok{ sf}\SpecialCharTok{::}\FunctionTok{st\_coordinates}\NormalTok{(geometry)[,}\DecValTok{1}\NormalTok{],}
+    \AttributeTok{lat =}\NormalTok{ sf}\SpecialCharTok{::}\FunctionTok{st\_coordinates}\NormalTok{(geometry)[,}\DecValTok{2}\NormalTok{]}
+\NormalTok{  )}
+
+\NormalTok{top5\_cities}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Simple feature collection with 5 features and 4 fields
+## Geometry type: POINT
+## Dimension:     XY
+## Bounding box:  xmin: 6.97 ymin: 48.14 xmax: 13.38 ymax: 53.55
+## Geodetic CRS:  WGS 84
+##        name     pop            geometry   lon   lat
+## 1    Berlin 3378275 POINT (13.38 52.52) 13.38 52.52
+## 2   Hamburg 1743891    POINT (10 53.55) 10.00 53.55
+## 3    Munich 1272179 POINT (11.58 48.14) 11.58 48.14
+## 4   Cologne  960974  POINT (6.97 50.95)  6.97 50.95
+## 5 Frankfurt  642811  POINT (8.68 50.12)  8.68 50.12
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{german\_bubble\_map }\SpecialCharTok{+}
+  \FunctionTok{geom\_label\_repel}\NormalTok{(}
+    \AttributeTok{data =}\NormalTok{ top5\_cities,}
+    \AttributeTok{mapping =} \FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ lon, }\AttributeTok{y =}\NormalTok{ lat, }\AttributeTok{label =}\NormalTok{ name),}
+    \AttributeTok{size =} \FloatTok{2.5}\NormalTok{, }\CommentTok{\# font size}
+    \AttributeTok{min.segment.length =} \DecValTok{0}\NormalTok{,}
+    \AttributeTok{max.overlaps =} \DecValTok{30}\NormalTok{,}
+    \AttributeTok{force =} \FloatTok{0.5}\NormalTok{, }\CommentTok{\# how strongly labels push away}
+    \AttributeTok{box.padding =} \FloatTok{0.2}
+\NormalTok{  )}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{Chapter5_files/figure-latex/unnamed-chunk-13-1.pdf}}
+
+\end{document}
