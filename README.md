@@ -8,7 +8,7 @@ Progress:
 4. [x] Creating Your First Thematic Map with ggplot2
 5. [x] Point Maps and Geographic Visualization
 6. [x] Line and Network Maps: Tracing Paths
-7. [ ] Understanding Raster Data: The World in Pixels
+7. [x] Understanding Raster Data: The World in Pixels
 8. [ ] Terrain and Elevation Visualization: Shaping the Land
 9. [ ] Interactive Maps with leaflet: Bringing Your Maps to Life!
 10. [ ] Introduction to 3d Mapping with rayshader: Adding Depth

@@ -1,0 +1,294 @@
+---
+title: "Chapter 7"
+author: "Norman Lim"
+date: "2025-10-31"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+## Hands-On: Working with Your First Raster
+
+### Preparing the environment:
+
+Step 1: Load necessary packages
+```{r}
+pacman::p_load(terra, sf, tidyverse, geodata)
+```
+
+Step 2: Set theme to make it easier to create consistent plots later. 
+```{r}
+theme_set(theme_minimal())
+```
+
+### Loading Raster Data
+
+Step 1: Load raster data from `geodata`:
+```{r}
+global_elevation_10min <- geodata::elevation_global(
+  res = 10, # 10 arc-minite resolution (coarse, smaller file)
+  path = tempdir()
+)
+```
+
+Step 2: Inspect the key properties of the raster data:
+```{r}
+global_elevation_10min
+```
+
+
+### Inspecting Your Raster (using `terra` functions)
+
+Step 1: Check the resolution using `terra::res()`:
+```{r}
+terra::res(global_elevation_10min)
+```
+
+Step 2: Check extent (bounding box) using `terra::ext()`:
+```{r}
+terra::ext(global_elevation_10min)
+```
+
+Step 3: Check coordinate system using `terra::crs()`:
+```{r}
+terra::crs(global_elevation_10min)
+```
+
+Step 4: Check number of layers/bands using `terra::nlyr()`:
+```{r}
+terra::nlyr(global_elevation_10min)
+```
+
+Step 5: Look at some pixel values using `terra::values()` together with `head()`:
+```{r}
+head(terra::values(global_elevation_10min))[, 1]
+```
+
+Step 6: Get min/max elevation values efficiently using `terra::minmax()`:
+```{r}
+terra::minmax(global_elevation_10min)
+```
+
+
+### Basic Plotting
+
+Method 1: Quick plotting using `terra::plot()`:
+```{r}
+terra::plot(global_elevation_10min)
+```
+
+Adding titles to the basic plot:
+```{r}
+# Use `title("Global Elevation (terra::plot)")`
+```
+
+Method 2: Plotting with `ggplot2::geom_raster()`:
+
+Step 1: Load the required packages:
+```{r}
+pacman::p_load(viridis)
+```
+
+Step 2: Convert SpatRaster to data frame for `ggplot2` using 
+`terra::as.data.frame()`:
+```{r}
+elevation_df <- terra::as.data.frame(
+  global_elevation_10min,
+  xy = TRUE # to include the longitude (x) and latitude (y)
+)
+```
+
+Step 3: Inspect the data structure:
+```{r}
+head(elevation_df)
+glimpse(elevation_df)
+colnames(elevation_df)
+```
+
+Step 4: Rename the the value columm for easier plotting:
+```{r}
+# Extract the original name first:
+value_col_name <- names(elevation_df)[3]
+value_col_name
+
+elevation_df <- elevation_df |>
+  rename(elevation = dplyr::all_of(value_col_name)
+) |> 
+  filter(!is.na(elevation))
+
+colnames(elevation_df)
+```
+
+Step 5: Create the plot in `ggplot`:
+```{r}
+elevation_df |> ggplot() +
+  geom_raster(aes(x = x, y = y, fill = elevation)) +
+  # Add a suitable color scale
+  scale_fill_viridis_c(
+    option = "cividis", name = "Elevation (m)"
+  ) +
+  labs(
+    title = "Global Elevation (ggplot2)",
+    x = "Longitude", y = "Latitude",
+    caption = "Data Source: WorldClim via geodata"
+  ) +
+  # Use coord_sf() to ensure proper map aspect ratio
+  coord_sf(
+    crs = 4326, 
+    expand = FALSE # to remove the padding
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "bottom",
+    legend.key.width = unit(1.5, "cm") # make color bar wider
+  )
+```
+
+
+### Simple Raster Operations: Cropping using `terra::crop()`:
+
+Step 1: Load the required packages:
+```{r}
+pacman::p_load(sf, naturalearth)
+```
+
+Step 2: Ensure that global elevation raster exists. 
+
+Step 3: Get target boundary polygon from `rnaturalearth`. For this example, the
+target boundary is South America.
+```{r}
+sa_boundary_sf <- rnaturalearth::ne_countries(
+  scale = "medium",
+  continent = "South America", 
+  returnclass = "sf"
+) |> 
+  select(
+    iso_a3 = adm0_a3, name, geometry
+  )
+
+sa_boundary_sf
+```
+
+Step 4: Ensure that the CRS in the raster and vector polygons are matching:
+```{r}
+raster_crs_str <- terra::crs(global_elevation_10min, proj = TRUE)
+raster_crs_str2 <- terra::crs(global_elevation_10min, describe = TRUE)
+vector_crs_sf <- sf::st_crs(sa_boundary_sf)
+
+paste("Raster CRS:", raster_crs_str)
+paste("Raster CRS:", raster_crs_str2$name)
+paste("Vector CRS:", vector_crs_sf$Name)
+```
+
+Step 5: Make the necessary transformations:
+```{r}
+# Transform the vector boundary to match the raster's CRS
+sa_boundary_sf <- sa_boundary_sf |> 
+  sf::st_transform(
+    crs = terra::crs(global_elevation_10min)
+  )
+```
+
+Step 6: Crop the raster using the sf polygon boundary using `terra::crop()`:
+```{r}
+sa_elevation <- terra::crop(
+  global_elevation_10min, sa_boundary_sf,
+  mask = TRUE # to make pixels outside the polygon equal to NA
+)
+```
+
+Step 7: Inspect the cropped raster:
+```{r}
+sa_elevation
+```
+
+Step 8: Plot the cropped raster using `terra::plot()`:
+```{r}
+terra::plot(sa_elevation)
+```
+
+### Project Exercise: Explore Your Region's Elevation
+
+Goal: Create a basic elevation map for a chosen country using `terra` and 
+`ggplot2`. 
+
+Step 1: Choose Country and Setup:
+```{r}
+pacman::p_load(sf, tidyverse, terra, geodata, giscoR, ggplot2, viridis)
+chosen_country_name = "Philippines"
+
+country_code_ph <- country_codes(chosen_country_name)$ISO3
+country_code_ph
+```
+
+Step 2: Downlaod Elevation Data:
+```{r}
+my_country_elev <- geodata::elevation_30s(
+  country = country_code_ph,
+  path = tempdir()
+)
+```
+
+Step 3: Inspect.
+```{r}
+my_country_elev
+terra::crs(my_country_elev)
+```
+
+
+Step 4: Map with `ggplot`.
+
+First, convert raster file to data frame:
+```{r}
+# Convert raster file to data frame 
+my_country_df <- as.data.frame(my_country_elev, xy = TRUE)
+
+my_country_df <- my_country_df |> 
+  rename(
+    elevation = names(my_country_df)[3]
+  ) |> 
+  filter(!is.na(names(my_country_df)[1]))
+
+head(my_country_df)
+```
+
+Plot with `ggplot2`:
+```{r}
+my_country_map <- my_country_df |> ggplot() +
+  geom_raster(
+    aes(x = x, y = y, fill = elevation)
+  ) +
+  scale_fill_viridis_c(
+    option = "mako",
+    name = "Elevation",
+    direction = -1
+  ) +
+  labs(
+    title = paste("Elevation Map of the", chosen_country_name),
+    caption = "Data: SRTM 30s via geodata"
+  ) +
+  coord_sf(
+    crs = terra::crs(my_country_elev), 
+    expand = FALSE # to remove the padding
+  ) +
+  theme_minimal() +
+  theme(
+    axis.title = element_blank(),
+    plot.title = element_text(hjust = 0.5, face = "bold")
+  )
+
+my_country_map
+
+# saving
+ggsave(
+  "my_country_elevation_map.png", my_country_map,
+  width = 8, height = 6,
+  dpi = 600, bg = "white"
+)
+```
+
+
+
+
+
+
