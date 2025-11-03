@@ -1,0 +1,408 @@
+---
+title: "Chapter 8"
+author: "The Caveman Coder"
+date: "2025-11-03"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+
+## Hands-On: Visualizing Elevation Data
+
+### Setting up the environment
+
+Step 1: Load necessary packages:
+```{r}
+pacman::p_load(terra, geodata, sf, tidyverse, viridis)
+```
+
+Step 2: Set general theme:
+```{r}
+theme_set(theme_minimal())
+```
+
+
+### Getting Elevation Data for Switzerland
+
+Step 1: Define country code:
+```{r}
+country_iso <- "CHE"
+```
+
+Step 2: Download/load elevation data using `geodata::elevation_30s`.
+```{r}
+swiss_elev_raster <- geodata::elevation_30s(
+  country = country_iso,
+  path = tempdir()
+)
+```
+
+Step 3: Inspect the loaded raster data:
+```{r}
+swiss_elev_raster
+```
+
+Step 4: Generate a quick plot using `terra::plot()`:
+```{r}
+terra::plot(
+  swiss_elev_raster,
+  main = paste("Elevation (SRTM 30s) -", country_iso)
+)
+```
+
+
+### Calculate Terrain Attributes (Slope, Aspect, Hillshade)
+
+Step 1: Calculate Slope and Aspect using `terra::terrain()`:
+```{r}
+terrain_attributes <- terra::terrain(
+  swiss_elev_raster,
+  v = c("slope", "aspect"),
+  unit = "radians"
+) 
+terrain_attributes
+```
+
+Step 2: Plot Slope and Aspect individually with MULTIPLE layers:
+
+Plotting `Slope`:
+```{r}
+terra::plot(
+  terrain_attributes$slope,
+  main = "Slope (Radians)"
+)
+```
+
+Plotting `Aspect`:
+```{r}
+terra::plot(
+  terrain_attributes$aspect,
+  main = "Aspect (Radians from North)",
+  col = viridis(100)
+)
+```
+
+Step 3: Calculate Hillshade using `terra::shade()`:
+```{r}
+hillshade <- terra::shade(
+  terrain_attributes$slope,
+  terrain_attributes$aspect,
+  angle = 45, # degrees above the horizon
+  direction = 270 # setting for the sun's direction (270 = West, 0 = North, etc.)
+)
+
+hillshade
+```
+
+Step 4: Plot the Hillshade (standard is grayscale)
+```{r}
+terra::plot(
+  hillshade,
+  col = gray(0:100 / 100), # Creates 101 shades of gray
+  legend = FALSE, # Hides color legend
+  main = "Hillshade (Sun from West)"
+)
+```
+
+
+### Creating Shaded Relief Maps with `ggplot2` (The Cool Part!)
+
+Step 1: Load necessary packages and set the environment
+```{r}
+pacman::p_load(terra, tidyverse, dplyr, tidyterra, ggnewscale)
+```
+
+Rename layers for clarity:
+```{r}
+names(swiss_elev_raster) <- "elevation"
+names(hillshade) <- "hillshade_val"
+```
+
+Convert `swiss_elev_raster` to a data frame:
+```{r}
+elev_df_gg <- terra::as.data.frame(
+  swiss_elev_raster,
+  xy = TRUE,
+  na.rm = TRUE
+)
+
+hillshade_df_gg <- terra::as.data.frame(
+  hillshade,
+  xy = TRUE,
+  na.rm = TRUE
+)
+
+# Define map limits
+limits <- terra::minmax(swiss_elev_raster) 
+```
+
+Step 2: Create the ggplot map with hillshade overlay:
+```{r}
+shaded_relief_map <- ggplot() +
+  geom_raster(
+    data = hillshade_df_gg,
+    aes(x = x, y = y, fill = hillshade_val),
+    show.legend = FALSE
+  ) +
+  # Change default color palette
+  scale_fill_gradientn(
+    colors = hcl.colors(12, "Light Grays", rev = TRUE),
+    na.value = NA # Transparent for any missing cells
+  ) +
+  # Rendering the elevation raster on top of the hillshade
+  ggnewscale::new_scale_fill() +
+  geom_raster(
+    data = elev_df_gg,
+    aes(x = x, y = y, fill = elevation),
+    alpha = 0.5
+  ) +
+  # Choose a continuous hypso palette for elevation
+  tidyterra::scale_fill_hypso_tint_c(
+    palette = "dem_print",
+    limits = limits
+  ) +
+  # Labels and theme
+  labs(
+    title = "Shaded Relief Map of Switzwerland",
+    fill = "Elevation (m)", 
+    caption = paste(
+      "Data: SRTM 30s via geodata.",
+      "Hillshade: Sun from West (270 deg)"
+    )
+  ) + 
+  # Ensure correct aspect ratio for maps
+  coord_sf(crs = terra::crs(swiss_elev_raster)) +
+  theme_minimal() +
+  theme(
+    legend.position = "right",
+    axis.title = element_blank()
+  )
+
+shaded_relief_map
+```
+
+
+### Generation and Styling
+
+Step 1: Load necessary packages
+```{r}
+pacman::p_load(terra, sf, tidyverse)
+```
+
+Step 2: Generate contour lines using `terra::as.contour()`:
+```{r}
+contour_lines_terra <- terra::as.contour(
+  swiss_elev_raster, nlevels = 10
+)
+```
+
+Step 3: Convert terra's contour output (SpatRaster) to an `sf` object:
+```{r}
+contour_lines_sf <- contour_lines_terra |> 
+  sf::st_as_sf()
+
+contour_lines_sf
+```
+
+Step 4: Map contours with `ggplot2`:
+```{r}
+contour_map <- ggplot() +
+  # Layer 1: Plot of contour lines using sf with the 'level' column mapped to
+  # color aesthetic
+  geom_sf(
+    data = contour_lines_sf,
+    aes(color = level),
+    linewidth = 0.3
+  ) +
+  # Use a sequential color scale like scale_color_viridis_c
+  scale_color_viridis_c(
+    option = "mako",
+    name = "Elevation (m)"
+  ) +
+  # Labels and theme
+  labs(
+    title = "Contour Map of Switzerland",
+    caption = "Data: SRTM 30s via geodata"
+  ) +
+  # Themes
+  theme_minimal() +
+  theme(
+    axis.text = element_blank(),
+    panel.grid = element_blank()
+  )
+  
+contour_map
+```
+
+
+### Combining Elevation with Other Features
+
+Example of an elevation map including the `geom_sf` layer for boundary
+
+Step 1: Load the necessary packages
+```{r}
+pacman::p_load(terra, tidyverse, tidyterra, ggnewscale, geodata)
+```
+
+Step 2: Get country boundary layer and add to the shaded relief map earlier
+```{r}
+ch_boundary_sf <- geodata::gadm(
+  country = "CHE", level = 0, path = tempdir()
+) |> 
+  sf::st_as_sf() |> 
+  sf::st_transform(
+    crs = terra::crs(swiss_elev_raster)
+  )
+```
+
+Add to relief map:
+```{r}
+shaded_relief_map_with_border <- shaded_relief_map +
+  # Add boundary layer
+  geom_sf(
+    data = ch_boundary_sf,
+    fill = NA,
+    color = "black",
+    linewidth = 0.5
+  ) +
+  labs(
+    title = "Shaded Relief Map of Switzerland with Border",
+    x = "Longitude",
+    y = "Latitude",
+    caption = paste(
+      "Data: SRTM 30s via geodata",
+      "Hillshade: Sun from West (270 deg)"
+    )
+  ) +
+  coord_sf(crs = terra::crs(swiss_elev_raster)) +
+  theme_minimal() +
+  theme(
+    legend.position = "right",
+    axis.text = element_blank()
+  )
+
+
+shaded_relief_map_with_border
+```
+
+
+### Project Exercise: Create a  Topographic Map with Styled Elevation
+
+Step 1: Choose region
+```{r}
+country_iso <- "PHL" # Philippines
+```
+
+Step 2: Get data
+```{r}
+elevation_raster <- geodata::elevation_30s(
+  country = country_iso, path = tempdir()
+)
+
+boundary_sf <- geodata::gadm(
+  country = country_iso, level = 0, path = tempdir()
+) |> 
+  sf::st_as_sf() |> 
+  sf::st_transform(
+    crs = terra::crs(elevation_raster)
+  )
+```
+
+Step 3: Calculate Terrain Attributes
+```{r}
+terrain_attrs <- terra::terrain(
+  elevation_raster,
+  v = c("slope", "aspect"),
+  unit = "degrees"
+)
+
+hillshade_raster <- terra::shade(
+  terrain_attrs$slope,
+  terrain_attrs$aspect,
+  angle = 45,
+  direction = 225 # Sun from NE
+)
+
+names(hillshade_raster) <- "hillshade_val"
+names(elevation_raster) <- "elevation"
+
+```
+
+Step 4: Prepare for plotting
+```{r}
+elev_df <- terra::as.data.frame(
+  elevation_raster,
+  xy = TRUE,
+  na.rm = TRUE
+)
+
+hill_df <- terra::as.data.frame(
+  hillshade_raster,
+  xy = TRUE,
+  na.rm = TRUE
+)
+```
+
+Step 5: Set the limits
+```{r}
+limits <- terra::minmax(elevation_raster)
+```
+
+Step 5: Plot!
+```{r}
+topo_map_project <- ggplot() +
+  # Hillshade layer
+  geom_raster(
+    data = hill_df,
+    aes(x = x, y = y, fill = hillshade_val),
+    show.legend = FALSE
+  ) + 
+  scale_fill_gradientn(
+    colors = hcl.colors(
+      12, "Light Grays", rev = TRUE
+    ),
+    na.value = NA
+  ) +
+  # Elevation layer
+  ggnewscale::new_scale_fill() +
+  geom_raster(
+    data = elev_df,
+    aes(x = x, y = y, fill = elevation)
+  ) +
+  tidyterra::scale_fill_hypso_tint_c(
+    palette = "dem_poster",
+    limits = limits,
+    alpha = 0.5
+  ) +
+  # Optional boundary
+  geom_sf(
+    data = boundary_sf,
+    fill = NA, 
+    color = "black",
+    linewidth = 0.1
+  ) +
+  # Labels
+  labs(
+    title = "Shaded Relief Map of the Philippines",
+    caption = "Data: SRTM 30s via geodata"
+  ) +
+  geom_sf(
+    crs = terra::crs(elevation_raster), expand = FALSE
+  ) +
+  theme_void() +
+  theme(
+    legend.position = "right",
+    plot.title = element_text(hjust = 0.5, face = "bold")
+  )
+
+topo_map_project
+```
+
+Step 7: Saving
+```{r}
+# ggsave("topo_map_phl.png", topo_map_project, width = 7, height = 8, dpi = 300, bg = "white")
+```
+
+
+

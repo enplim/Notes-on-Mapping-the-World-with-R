@@ -9,7 +9,7 @@ Progress:
 5. [x] Point Maps and Geographic Visualization
 6. [x] Line and Network Maps: Tracing Paths
 7. [x] Understanding Raster Data: The World in Pixels
-8. [ ] Terrain and Elevation Visualization: Shaping the Land
+8. [x] Terrain and Elevation Visualization: Shaping the Land
 9. [ ] Interactive Maps with leaflet: Bringing Your Maps to Life!
 10. [ ] Introduction to 3d Mapping with rayshader: Adding Depth
 11. [ ] Creating Map Animations and Time Series with gganimate
