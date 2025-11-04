@@ -1,0 +1,334 @@
+---
+title: "Chapter 9"
+author: "The Caveman Coder"
+date: "2025-11-03"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+## Hands-On: Interactive Map with `leaflet`
+
+### Loading Packages
+```{r}
+pacman::p_load(leaflet, sf, tidyverse)
+```
+
+### Empty Map with Base Tiles
+
+Step 1 & 2: Initialize a leaflet map widget and add OSM tile layer
+```{r}
+basic_map <- leaflet() |> 
+  addTiles()
+```
+
+Step 3: Display the map:
+```{r}
+basic_map
+```
+
+
+### Adding Provider Tiles (Background)
+```{r}
+provider_map_light <- leaflet() |> 
+  addProviderTiles(
+    provider = providers$CartoDB.Positron
+  ) |> 
+  setView(lng = 0, lat = 30, zoom = 2)
+
+provider_map_light
+```
+
+
+Another example:
+```{r}
+provider_map_sat <- leaflet() |> 
+  addProviderTiles(
+    provider = providers$Esri.WorldImagery # Satellite
+  ) |> 
+  setView(lng = 10, lat = 50, zoom = 4)
+
+provider_map_sat
+```
+
+
+### Adding Your Own Data: Mazrkers and Polygons
+
+Adding Points and Markers
+
+Step 1: Load packages if needed:
+```{r}
+pacman::p_load(leaflet, sf, tidyverse)
+```
+
+Step 2: Create sample city data as an sf object
+```{r}
+city_data_df <- data.frame(
+  name = c("Amsterdam", "London", "Tokyo", "Nairobi", "Rio de Janeiro"),
+  latitude = c(52.37, 51.51, 35.68, -1.29, -22.91),
+  longitude = c(4.89, -0.13, 139.69, 36.82, -43.17),
+  info = c("Canals & Culture", "Big Ben & Buses", "Bustling Metropolis",
+           "Safari Gateway", "Christ the Redeemer")
+)
+
+# Convert data frame to an sf object
+cities_sf <- sf::st_as_sf(
+  city_data_df,
+  coords = c("longitude", "latitude"),
+  crs = 4326
+)
+
+cities_sf
+```
+
+Step 3: Create map and add markers
+```{r}
+map_with_markers <- leaflet(data = cities_sf) |> 
+  addProviderTiles(
+    provider = providers$CartoDB.Positron
+  ) |> 
+  addMarkers(
+    popup = ~name
+  ) |> 
+  setView(lng = 30, lat = 20, zoom = 2)
+
+
+map_with_markers
+```
+
+### Adding Polygons like country boundary, etc.
+ 
+Step 1: Load packages and get boundary datda
+```{r}
+pacman::p_load(leaflet, sf, giscoR)
+
+france_sf <- giscoR::gisco_get_countries(
+  country = "FRA", resolution = "20"
+)
+
+france_sf
+```
+
+Step 2: Create map and add the polygon layer
+```{r}
+map_with_polygon <- leaflet(data = france_sf) |> 
+  addProviderTiles(
+    provider = providers$CartoDB.Positron
+  ) |> 
+  # Add polygons using `addPolygons()`
+  addPolygons(
+    fillColor = "darkslateblue",
+    color = "#FFFFFF", # white border color
+    weight = 1.5,
+    fillOpacity = 0.7,
+    popup = ~ NAME_ENGL
+  ) |> 
+  setView(
+    lng = 2.3, lat = 46.8, zoom = 5
+  )
+
+map_with_polygon
+```
+
+
+### Customizing Popups with HTML
+
+Step 1: Ensure packages and city data are ready.
+```{r}
+pacman::p_load(leaflet, sf, tidyverse, glue)
+```
+
+Step 2: Create map with customized popups
+```{r}
+map_custom_popups <- leaflet(data = cities_sf) |> 
+  addProviderTiles(
+    provider = providers$CartoDB.Positron
+  ) |> 
+  addMarkers(
+    popup = ~ glue::glue(
+      "<b>{name}</b><br/>", # City name in bold, then line break
+      "<i>{info}</i>" # Info from the `info` column in italics
+    )
+  ) |> 
+  setView(
+    lng = 30, lat = 20, zoom = 2
+  )
+
+map_custom_popups
+```
+
+
+### Giving Users Control: Layers Control
+
+Goal: Create a map with multiple base maps (Simple, OSM, Satellite) and two
+overlay layers (Cities, France boundary).
+
+Step 1: Load packages and ensure data exists
+```{r}
+pacman::p_load(leaflet, sf, tidyverse, giscoR, glue)
+```
+
+Step 2: Create a map with multiple layers assigned to groups
+```{r}
+maps_with_layers <- leaflet() |> 
+  # base map layers
+  addProviderTiles(
+    provider = providers$CartoDB.Positron,
+    group = "Simple Map"
+  ) |> 
+  addProviderTiles(
+    provider = providers$OpenStreetMap.Mapnik,
+    group = "OSM Map"
+  ) |> 
+  addProviderTiles(
+    provider = providers$Esri.WorldImagery,
+    group = "Satellite"
+  ) |> 
+  # Overlay data layers
+  addPolygons(
+    data = france_sf,
+    fillColor = "darkslateblue",
+    color = "white",
+    weight = 1.5,
+    fillOpacity = 0.7,
+    popup = ~ NAME_ENGL,
+    group = "Countries"
+  ) |> 
+  # City markers layer
+  addMarkers(
+    data = cities_sf,
+    popup = ~ glue::glue("<b>{name}</b><br/><i>{info}</i>"),
+    group = "Cities"
+  ) |> 
+  # Add layers control widget
+  addLayersControl(
+    baseGroups = c("Simple Map", "OSM Map", "Satellite"),
+    overlayGroups = c("Cities", "Countries"),
+    options = layersControlOptions(collazpsed = FALSE) # keep expanded
+  ) |> 
+  setView(
+    lng = 2.3,
+    lat = 46.8,
+    zoom = 4
+  ) 
+
+maps_with_layers
+```
+
+
+### Saving Your Interactive Map using `htmlwidgets::saveWidget`
+
+Step 1: Ensure that map object exists and load `htmlwidgets`
+```{r}
+pacman::p_load(htmlwidgets)
+```
+
+Step 2: Define output filename 
+```{r}
+output_html_file <- "my_interactive_map.html"
+```
+
+Step 3: Save the widget using `saveWidget()`
+```{r}
+htmlwidgets::saveWidget(
+  maps_with_layers, file = output_html_file, selfcontained = TRUE
+)
+```
+
+The `selfcontained = TRUE` bundles necessary JavaScript/CSS inside the HTML, 
+making it possible to share just one file and everything will work accordingly. 
+
+
+### Project Excercise: Build an Interactive Map of Global Landmarks
+
+Goal: An interactive web map using `leaflet` showing markers for landmarks like
+the Eiffel Tower, Statue of Liberty, Taj Mahal, etc., with popups displaying 
+their names and descriptions. 
+
+
+Step 1: Load packages:
+```{r}
+pacman::p_load(leaflet, sf, dplyr, glue, htmlwidgets)
+```
+
+Step 2: Create landmark data:
+```{r}
+landmarks_df <- data.frame(
+  landmark_name = c(
+    "Eiffel Tower", "Statue of Liberty", "Taj Mahal",
+    "Great Wall (Badaling)", "Machu Picchu", "Sydney Opera House" 
+  ),
+  latitude = c(
+    48.8584, 40.6892, 27.1751,
+    40.3540, -13.1631, -33.8568
+  ),
+  longitude = c(
+    2.2945, -74.5450, 78.0421,
+    116.0005, -72.5450, 151.2153
+  ),
+  description = c(
+    "Iconic tower in Paris, France.",
+    "Symbol of freedom in New York, USA.",
+    "Ivory-white marble mausoleum in Agra, India.",
+    "Famous section o the Great Wall near Beijing, China.",
+    "Incan citadel set high in the Andes Mountains, Peru.",
+    "Multi-venue performing arts center in Sydney, Australia."
+  )
+)
+```
+
+Step 3: Convert data frame to sf:
+```{r}
+landmarks_sf <- sf::st_as_sf(
+  landmarks_df,
+  coords = c("longitude", "latitude"),
+  crs = 4326
+)
+```
+
+Step 4: Build Leaflet Map
+```{r}
+landmark_map <- leaflet() |> 
+  # base map
+  addProviderTiles(
+    provider = providers$OpenStreetMap.Mapnik,
+    group = "Street Map"
+  ) |> 
+  addProviderTiles(
+    provider = providers$Esri.WorldImagery,
+    group = "Satellite"
+  ) |> 
+  # landmark markers
+  addMarkers(
+    data = landmarks_sf,
+    popup = ~ glue::glue(
+      "<b>{landmark_name}</b><br/>{description}"
+    ),
+    group = "Landmarks"
+  ) |> 
+  # Controls
+  addLayersControl(
+    baseGroups = c("Street Map", "Satellite"),
+    overlayGroups = c("Landmarks"),
+    options = layersControlOptions(collapsed = FALSE)
+  ) |> 
+  # set view
+  setView(lng = 10, lat = 30, zoom = 2)
+
+landmark_map
+```
+
+Saving Map:
+```{r}
+htmlwidgets::saveWidget(
+  landmark_map,
+  file = "landmark_map.html",
+  selfcontained = TRUE
+)
+```
+
+
+
+
+
+
